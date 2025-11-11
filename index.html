@@ -632,6 +632,7 @@ body {
         <header class="header">
             <h1 class="header-title">Google Play Store ASO Checklist</h1>
             <p class="header-subtitle">Comprehensive guide to optimize your app's visibility and conversion on the Play Store</p>
+      <button id="logoutBtn" class="btn btn-secondary" style="display:none; float:right;">Logout</button>
         </header>
 
         <!-- Progress Dashboard -->
@@ -1351,13 +1352,16 @@ body {
   document.querySelector(".app-container").style.display = "none";
 
   onAuthStateChanged(auth, (user) => {
+    const logoutBtn = document.getElementById('logoutBtn');
     if (!user) {
+      // Hide app and logout button, redirect to login
+      if (logoutBtn) logoutBtn.style.display = 'none';
       window.location.href = "login.html";
       return;
     }
-    // Show app & launch your existing code
+    // Show app, show logout button & launch your existing code
+    if (logoutBtn) logoutBtn.style.display = '';
     document.querySelector(".app-container").style.display = "";
-    // If your script auto-calls init(), remove that and call here:
     if (typeof init === "function") init();
   });
 
