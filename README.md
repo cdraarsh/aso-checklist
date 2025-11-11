@@ -34,4 +34,4 @@ A static site (hosted on GitHub Pages) with Firebase Authentication protecting t
 ```bash
 # Python 3
 python3 -m http.server 8080
-# then open http://localhost:8080/login.html
+# then open http://localhost:8080/login.html# aso-checklist
