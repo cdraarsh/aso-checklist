@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Sign in — ASO Checklist</title>
+    <style>
+      /* Minimal styles so the form is usable during preview */
+      body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #fff; color: #111; padding: 24px; }
+      .card { max-width:420px; margin:32px auto; border:1px solid #eee; padding:20px; border-radius:10px; box-shadow:0 4px 14px rgba(16,24,40,0.04); }
+      .row { margin-bottom:12px; }
+      input[type=email], input[type=password] { width:100%; padding:10px 12px; border:1px solid #ddd; border-radius:8px; }
+      .primary { background:#217f8d; color:#fff; border:none; padding:10px 14px; border-radius:8px; cursor:pointer; }
+      .google { background:#fff; border:1px solid #ddd; padding:10px 14px; border-radius:8px; cursor:pointer; width:100%; margin-top:8px }
+      .error { color:#b71c1c; margin-top:8px }
+      .muted { margin-top:12px; color:#666 }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <form id="emailForm">
+        <div class="row">
+          <input id="email" type="email" placeholder="Email" required />
+        </div>
+        <div class="row">
+          <input id="password" type="password" placeholder="Password" required />
+        </div>
+        <button class="primary" type="submit">Continue</button>
+      </form>
+
+      <div id="error" class="error" style="display:none"></div>
+      <p class="muted">You’ll be redirected to the checklist after sign-in.</p>
+    </div>
+
+    <script type="module">
+      // Use Firebase v12 modules (auth + app). Keep analytics if you want measurement.
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
+      import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-analytics.js";
+  import { getAuth, onAuthStateChanged, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
+
+      // Firebase configuration (copy from Project Settings)
+      const firebaseConfig = {
+        apiKey: "AIzaSyBalB604BqNpNA9DtFxixDXztL-x1uMZgA",
+        authDomain: "aso-checklist.firebaseapp.com",
+        projectId: "aso-checklist",
+        storageBucket: "aso-checklist.firebasestorage.app",
+        messagingSenderId: "31619738793",
+        appId: "1:31619738793:web:481ea619882b3dd2b48db8",
+        measurementId: "G-4JDEJQLDWJ"
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const analytics = getAnalytics(app);
+      const auth = getAuth(app);
+
+      // If already signed in, go to app
+      onAuthStateChanged(auth, (user) => {
+        if (user) window.location.href = "index.html";
+      });
+
+  const emailForm = document.getElementById("emailForm");
+  const errorBox = document.getElementById("error");
+
+      function showError(err) {
+        // Prefer friendly messages if available (err.code), fallback to message
+        errorBox.textContent = (err && err.code) ? err.code.replace('auth/', '').replaceAll('-', ' ') : (err && err.message) || String(err);
+        errorBox.style.display = "block";
+      }
+
+      emailForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        errorBox.style.display = "none";
+        const email = document.getElementById("email").value.trim();
+        const pw = document.getElementById("password").value;
+        try {
+          await signInWithEmailAndPassword(auth, email, pw);
+          window.location.href = "index.html";
+        } catch (err) {
+          showError(err);
+        }
+      });
+
+      // Google sign-in button removed — only email/password sign-in is enabled on this page.
+    </script>
+  </body>
+</html>

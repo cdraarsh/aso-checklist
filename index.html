@@ -1,0 +1,1373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Play Store ASO Checklist</title>
+    <style>
+        :root {
+  /* Primitive Color Tokens */
+  --color-white: rgba(255, 255, 255, 1);
+  --color-black: rgba(0, 0, 0, 1);
+  --color-cream-50: rgba(252, 252, 249, 1);
+  --color-cream-100: rgba(255, 255, 253, 1);
+  --color-gray-200: rgba(245, 245, 245, 1);
+  --color-gray-300: rgba(167, 169, 169, 1);
+  --color-gray-400: rgba(119, 124, 124, 1);
+  --color-slate-500: rgba(98, 108, 113, 1);
+  --color-brown-600: rgba(94, 82, 64, 1);
+  --color-charcoal-700: rgba(31, 33, 33, 1);
+  --color-charcoal-800: rgba(38, 40, 40, 1);
+  --color-slate-900: rgba(19, 52, 59, 1);
+  --color-teal-300: rgba(50, 184, 198, 1);
+  --color-teal-400: rgba(45, 166, 178, 1);
+  --color-teal-500: rgba(33, 128, 141, 1);
+  --color-teal-600: rgba(29, 116, 128, 1);
+  --color-teal-700: rgba(26, 104, 115, 1);
+  --color-teal-800: rgba(41, 150, 161, 1);
+  --color-red-400: rgba(255, 84, 89, 1);
+  --color-red-500: rgba(192, 21, 47, 1);
+  --color-orange-400: rgba(230, 129, 97, 1);
+  --color-orange-500: rgba(168, 75, 47, 1);
+
+  /* RGB versions for opacity control */
+  --color-brown-600-rgb: 94, 82, 64;
+  --color-teal-500-rgb: 33, 128, 141;
+  --color-slate-900-rgb: 19, 52, 59;
+  --color-slate-500-rgb: 98, 108, 113;
+  --color-red-500-rgb: 192, 21, 47;
+  --color-red-400-rgb: 255, 84, 89;
+  --color-orange-500-rgb: 168, 75, 47;
+  --color-orange-400-rgb: 230, 129, 97;
+
+  /* Background color tokens (Light Mode) */
+  --color-bg-1: rgba(59, 130, 246, 0.08);
+  --color-bg-2: rgba(245, 158, 11, 0.08);
+  --color-bg-3: rgba(34, 197, 94, 0.08);
+  --color-bg-4: rgba(239, 68, 68, 0.08);
+  --color-bg-5: rgba(147, 51, 234, 0.08);
+  --color-bg-6: rgba(249, 115, 22, 0.08);
+  --color-bg-7: rgba(236, 72, 153, 0.08);
+  --color-bg-8: rgba(6, 182, 212, 0.08);
+
+  /* Semantic Color Tokens (Light Mode) */
+  --color-background: var(--color-cream-50);
+  --color-surface: var(--color-cream-100);
+  --color-text: var(--color-slate-900);
+  --color-text-secondary: var(--color-slate-500);
+  --color-primary: var(--color-teal-500);
+  --color-primary-hover: var(--color-teal-600);
+  --color-primary-active: var(--color-teal-700);
+  --color-secondary: rgba(var(--color-brown-600-rgb), 0.12);
+  --color-secondary-hover: rgba(var(--color-brown-600-rgb), 0.2);
+  --color-secondary-active: rgba(var(--color-brown-600-rgb), 0.25);
+  --color-border: rgba(var(--color-brown-600-rgb), 0.2);
+  --color-btn-primary-text: var(--color-cream-50);
+  --color-card-border: rgba(var(--color-brown-600-rgb), 0.12);
+  --color-card-border-inner: rgba(var(--color-brown-600-rgb), 0.12);
+  --color-error: var(--color-red-500);
+  --color-success: var(--color-teal-500);
+  --color-warning: var(--color-orange-500);
+  --color-info: var(--color-slate-500);
+  --color-focus-ring: rgba(var(--color-teal-500-rgb), 0.4);
+  --color-select-caret: rgba(var(--color-slate-900-rgb), 0.8);
+
+  /* Common style patterns */
+  --focus-ring: 0 0 0 3px var(--color-focus-ring);
+  --focus-outline: 2px solid var(--color-primary);
+  --status-bg-opacity: 0.15;
+  --status-border-opacity: 0.25;
+
+  /* RGB versions for opacity control */
+  --color-success-rgb: 33, 128, 141;
+  --color-error-rgb: 192, 21, 47;
+  --color-warning-rgb: 168, 75, 47;
+  --color-info-rgb: 98, 108, 113;
+
+  /* Typography */
+  --font-family-base: "FKGroteskNeue", "Geist", "Inter", -apple-system,
+    BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-family-mono: "Berkeley Mono", ui-monospace, SFMono-Regular, Menlo,
+    Monaco, Consolas, monospace;
+  --font-size-xs: 11px;
+  --font-size-sm: 12px;
+  --font-size-base: 14px;
+  --font-size-md: 14px;
+  --font-size-lg: 16px;
+  --font-size-xl: 18px;
+  --font-size-2xl: 20px;
+  --font-size-3xl: 24px;
+  --font-size-4xl: 30px;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 550;
+  --font-weight-bold: 600;
+  --line-height-tight: 1.2;
+  --line-height-normal: 1.5;
+  --letter-spacing-tight: -0.01em;
+
+  /* Spacing */
+  --space-0: 0;
+  --space-1: 1px;
+  --space-2: 2px;
+  --space-4: 4px;
+  --space-6: 6px;
+  --space-8: 8px;
+  --space-10: 10px;
+  --space-12: 12px;
+  --space-16: 16px;
+  --space-20: 20px;
+  --space-24: 24px;
+  --space-32: 32px;
+
+  /* Border Radius */
+  --radius-sm: 6px;
+  --radius-base: 8px;
+  --radius-md: 10px;
+  --radius-lg: 12px;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.02);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.04),
+    0 2px 4px -1px rgba(0, 0, 0, 0.02);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.04),
+    0 4px 6px -2px rgba(0, 0, 0, 0.02);
+  --shadow-inset-sm: inset 0 1px 0 rgba(255, 255, 255, 0.15),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.03);
+
+  /* Animation */
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+  --ease-standard: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Layout */
+  --container-sm: 640px;
+  --container-md: 768px;
+  --container-lg: 1024px;
+  --container-xl: 1280px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-gray-400-rgb: 119, 124, 124;
+    --color-teal-300-rgb: 50, 184, 198;
+    --color-gray-300-rgb: 167, 169, 169;
+    --color-gray-200-rgb: 245, 245, 245;
+
+    --color-bg-1: rgba(29, 78, 216, 0.15);
+    --color-bg-2: rgba(180, 83, 9, 0.15);
+    --color-bg-3: rgba(21, 128, 61, 0.15);
+    --color-bg-4: rgba(185, 28, 28, 0.15);
+    --color-bg-5: rgba(107, 33, 168, 0.15);
+    --color-bg-6: rgba(194, 65, 12, 0.15);
+    --color-bg-7: rgba(190, 24, 93, 0.15);
+    --color-bg-8: rgba(8, 145, 178, 0.15);
+
+    --color-background: var(--color-charcoal-700);
+    --color-surface: var(--color-charcoal-800);
+    --color-text: var(--color-gray-200);
+    --color-text-secondary: rgba(var(--color-gray-300-rgb), 0.7);
+    --color-primary: var(--color-teal-300);
+    --color-primary-hover: var(--color-teal-400);
+    --color-primary-active: var(--color-teal-800);
+    --color-secondary: rgba(var(--color-gray-400-rgb), 0.15);
+    --color-secondary-hover: rgba(var(--color-gray-400-rgb), 0.25);
+    --color-secondary-active: rgba(var(--color-gray-400-rgb), 0.3);
+    --color-border: rgba(var(--color-gray-400-rgb), 0.3);
+    --color-error: var(--color-red-400);
+    --color-success: var(--color-teal-300);
+    --color-warning: var(--color-orange-400);
+    --color-info: var(--color-gray-300);
+    --color-focus-ring: rgba(var(--color-teal-300-rgb), 0.4);
+    --color-btn-primary-text: var(--color-slate-900);
+    --color-card-border: rgba(var(--color-gray-400-rgb), 0.2);
+    --color-card-border-inner: rgba(var(--color-gray-400-rgb), 0.15);
+    --shadow-inset-sm: inset 0 1px 0 rgba(255, 255, 255, 0.1),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+    --color-select-caret: rgba(var(--color-gray-200-rgb), 0.8);
+
+    --color-success-rgb: var(--color-teal-300-rgb);
+    --color-error-rgb: var(--color-red-400-rgb);
+    --color-warning-rgb: var(--color-orange-400-rgb);
+    --color-info-rgb: var(--color-gray-300-rgb);
+  }
+}
+
+@font-face {
+  font-family: 'FKGroteskNeue';
+  src: url('https://r2cdn.perplexity.ai/fonts/FKGroteskNeue.woff2')
+    format('woff2');
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  color: var(--color-text);
+  background-color: var(--color-background);
+  -webkit-font-smoothing: antialiased;
+}
+
+.app-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: var(--space-24);
+}
+
+/* Header Styles */
+.header {
+  margin-bottom: var(--space-32);
+}
+
+.header-title {
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--space-8);
+  color: var(--color-text);
+}
+
+.header-subtitle {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-24);
+}
+
+/* Progress Dashboard */
+.progress-dashboard {
+  background: var(--color-surface);
+  border: 1px solid var(--color-card-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-24);
+  margin-bottom: var(--space-32);
+  box-shadow: var(--shadow-sm);
+}
+
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-16);
+  flex-wrap: wrap;
+  gap: var(--space-16);
+}
+
+.progress-title {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+}
+
+.progress-percentage {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+}
+
+.progress-bar-container {
+  width: 100%;
+  height: 12px;
+  background: var(--color-secondary);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  margin-bottom: var(--space-16);
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: var(--color-primary);
+  border-radius: var(--radius-full);
+  transition: width var(--duration-normal) var(--ease-standard);
+}
+
+.progress-stats {
+  display: flex;
+  gap: var(--space-32);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  flex-wrap: wrap;
+}
+
+.progress-stat strong {
+  color: var(--color-text);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* Controls */
+.controls {
+  display: flex;
+  gap: var(--space-12);
+  margin-bottom: var(--space-24);
+  flex-wrap: wrap;
+}
+
+.search-box {
+  flex: 1;
+  min-width: 250px;
+  padding: var(--space-12) var(--space-16);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-base);
+  font-size: var(--font-size-base);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-family: var(--font-family-base);
+}
+
+.search-box:focus {
+  outline: var(--focus-outline);
+  border-color: var(--color-primary);
+}
+
+.btn {
+  padding: var(--space-12) var(--space-20);
+  border: none;
+  border-radius: var(--radius-base);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-standard);
+  font-family: var(--font-family-base);
+}
+
+.btn-primary {
+  background: var(--color-primary);
+  color: var(--color-btn-primary-text);
+}
+
+.btn-primary:hover {
+  background: var(--color-primary-hover);
+}
+
+.btn-secondary {
+  background: var(--color-secondary);
+  color: var(--color-text);
+}
+
+.btn-secondary:hover {
+  background: var(--color-secondary-hover);
+}
+
+/* Sections Grid */
+.sections-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: var(--space-24);
+}
+
+@media (max-width: 768px) {
+  .sections-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Section Card */
+.section-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-card-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--duration-normal) var(--ease-standard);
+}
+
+.section-card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.section-header {
+  padding: var(--space-20);
+  cursor: pointer;
+  user-select: none;
+  border-bottom: 1px solid var(--color-card-border-inner);
+}
+
+.section-header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-12);
+}
+
+.section-info {
+  flex: 1;
+}
+
+.section-title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--space-6);
+  color: var(--color-text);
+}
+
+.section-description {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}
+
+.section-expand-icon {
+  font-size: var(--font-size-xl);
+  color: var(--color-text-secondary);
+  transition: transform var(--duration-fast) var(--ease-standard);
+}
+
+.section-card.expanded .section-expand-icon {
+  transform: rotate(180deg);
+}
+
+.section-progress {
+  margin-top: var(--space-12);
+  font-size: var(--font-size-sm);
+  color: var(--color-primary);
+  font-weight: var(--font-weight-medium);
+}
+
+/* Section Content */
+.section-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height var(--duration-normal) var(--ease-standard);
+}
+
+.section-card.expanded .section-content {
+  max-height: 3000px;
+}
+
+.section-items {
+  padding: var(--space-16);
+}
+
+/* Checklist Item */
+.checklist-item {
+  border: 1px solid var(--color-card-border-inner);
+  border-radius: var(--radius-base);
+  margin-bottom: var(--space-12);
+  background: var(--color-background);
+}
+
+.checklist-item:last-child {
+  margin-bottom: 0;
+}
+
+.item-header {
+  padding: var(--space-16);
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-12);
+  cursor: pointer;
+  user-select: none;
+}
+
+.item-checkbox-container {
+  display: flex;
+  align-items: center;
+  padding-top: var(--space-2);
+}
+
+.item-checkbox {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: var(--color-primary);
+}
+
+.item-content {
+  flex: 1;
+}
+
+.item-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-12);
+  margin-bottom: var(--space-6);
+}
+
+.item-title {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text);
+}
+
+.item-description {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}
+
+/* Priority Badge */
+.priority-badge {
+  padding: var(--space-4) var(--space-10);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  white-space: nowrap;
+}
+
+.priority-high {
+  background: rgba(var(--color-error-rgb), var(--status-bg-opacity));
+  color: var(--color-error);
+  border: 1px solid rgba(var(--color-error-rgb), var(--status-border-opacity));
+}
+
+.priority-medium {
+  background: rgba(var(--color-warning-rgb), var(--status-bg-opacity));
+  color: var(--color-warning);
+  border: 1px solid rgba(var(--color-warning-rgb), var(--status-border-opacity));
+}
+
+.priority-low {
+  background: rgba(var(--color-info-rgb), var(--status-bg-opacity));
+  color: var(--color-info);
+  border: 1px solid rgba(var(--color-info-rgb), var(--status-border-opacity));
+}
+
+/* Item Details */
+.item-details {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height var(--duration-normal) var(--ease-standard);
+}
+
+.checklist-item.expanded .item-details {
+  max-height: 1000px;
+}
+
+.item-details-content {
+  padding: 0 var(--space-16) var(--space-16) var(--space-16);
+  border-top: 1px solid var(--color-card-border-inner);
+  margin-top: var(--space-12);
+  padding-top: var(--space-16);
+}
+
+.detail-section {
+  margin-bottom: var(--space-16);
+}
+
+.detail-section:last-child {
+  margin-bottom: 0;
+}
+
+.detail-label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+  margin-bottom: var(--space-8);
+  display: block;
+}
+
+.detail-content {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  white-space: pre-line;
+}
+
+.detail-content strong {
+  color: var(--color-text);
+  font-weight: var(--font-weight-medium);
+}
+
+/* Completed Item */
+.checklist-item.completed .item-title {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
+.checklist-item.completed .item-description {
+  opacity: 0.5;
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: var(--space-32);
+  color: var(--color-text-secondary);
+}
+
+.empty-state-icon {
+  font-size: 48px;
+  margin-bottom: var(--space-16);
+}
+
+.empty-state-text {
+  font-size: var(--font-size-lg);
+}
+
+/* Print Styles */
+@media print {
+  body {
+    background: white;
+    color: black;
+  }
+  
+  .controls {
+    display: none;
+  }
+  
+  .section-card {
+    page-break-inside: avoid;
+    box-shadow: none;
+    border: 1px solid #ddd;
+  }
+  
+  .section-content {
+    max-height: none !important;
+  }
+  
+  .item-details {
+    max-height: none !important;
+  }
+}
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <header class="header">
+            <h1 class="header-title">Google Play Store ASO Checklist</h1>
+            <p class="header-subtitle">Comprehensive guide to optimize your app's visibility and conversion on the Play Store</p>
+        </header>
+
+        <!-- Progress Dashboard -->
+        <div class="progress-dashboard">
+            <div class="progress-header">
+                <h2 class="progress-title">Overall Progress</h2>
+                <div class="progress-percentage" id="progressPercentage">0%</div>
+            </div>
+            <div class="progress-bar-container">
+                <div class="progress-bar-fill" id="progressBarFill" style="width: 0%"></div>
+            </div>
+            <div class="progress-stats">
+                <div class="progress-stat">
+                    <strong id="completedCount">0</strong> of <strong id="totalCount">0</strong> items completed
+                </div>
+                <div class="progress-stat">
+                    <strong id="sectionsCompleted">0</strong> sections fully completed
+                </div>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls">
+            <input type="text" class="search-box" id="searchBox" placeholder="Search checklist items...">
+            <button class="btn btn-secondary" id="expandAllBtn">Expand All</button>
+            <button class="btn btn-secondary" id="collapseAllBtn">Collapse All</button>
+            <button class="btn btn-primary" id="exportBtn">Export Progress</button>
+            <button class="btn btn-secondary" onclick="window.print()">Print</button>
+        </div>
+
+        <!-- Sections Grid -->
+        <div class="sections-grid" id="sectionsGrid"></div>
+
+        <!-- Empty State -->
+        <div class="empty-state" id="emptyState" style="display: none;">
+            <div class="empty-state-icon">🔍</div>
+            <p class="empty-state-text">No items match your search</p>
+        </div>
+    </div>
+
+    <script>
+        // ASO Checklist Data
+        const checklistData = [
+            {
+                id: 1,
+                title: "Keyword Research & Metadata Optimization",
+                description: "Foundation of ASO - optimize how Google Play understands your app",
+                items: [
+                    {
+                        id: "1.1",
+                        title: "Conduct Comprehensive Keyword Research",
+                        description: "Identify high-volume, relevant keywords users search for",
+                        importance: "High",
+                        tips: "- Balance keyword volume with relevancy\n- Use ASO tools like AppTweak or DataForSEO\n- Analyze competitor keywords\n- Consider long-tail keywords for less competition",
+                        benchmark: "Target keywords with 3-5% keyword density in descriptions",
+                        completed: false
+                    },
+                    {
+                        id: "1.2",
+                        title: "Optimize App Title with Primary Keyword",
+                        description: "App title is most visible element - use high-volume keywords",
+                        importance: "High",
+                        tips: "- Use 30-character space effectively\n- Include primary keyword at the beginning\n- Make it unique and descriptive\n- Avoid keyword stuffing",
+                        benchmark: "Include 1-2 primary keywords naturally",
+                        completed: false
+                    },
+                    {
+                        id: "1.3",
+                        title: "Craft Compelling Short Description (80 chars)",
+                        description: "Highlight app value proposition for conversion",
+                        importance: "High",
+                        tips: "- Lead with benefit, not features\n- Include 1-2 important keywords\n- Make it readable and scannable\n- Focus on why users need your app",
+                        benchmark: "3-5% keyword density",
+                        completed: false
+                    },
+                    {
+                        id: "1.4",
+                        title: "Optimize Long Description with Keywords",
+                        description: "Gets indexed by Google - important ranking factor",
+                        importance: "Medium",
+                        tips: "- Structure with bullet points\n- Repeat primary keyword 3-5 times\n- Maintain 2.5-3% keyword density\n- Explain features and benefits clearly",
+                        benchmark: "2.5-3% keyword density, well-structured content",
+                        completed: false
+                    }
+                ]
+            },
+            {
+                id: 2,
+                title: "Creative Assets Optimization",
+                description: "Visual elements that impact conversion rates",
+                items: [
+                    {
+                        id: "2.1",
+                        title: "Design Standout App Icon",
+                        description: "Only visual element in search results on Play Store",
+                        importance: "High",
+                        tips: "- Keep design simple and distinctive\n- Use vibrant colors to stand out\n- Ensure recognizability at small sizes\n- A/B test multiple variations",
+                        benchmark: "20.2% conversion rate uplift potential",
+                        completed: false
+                    },
+                    {
+                        id: "2.2",
+                        title: "Create High-Quality Screenshots (5-8)",
+                        description: "Showcase key features and app functionality",
+                        importance: "High",
+                        tips: "- Place best screenshots first\n- Add captions explaining features\n- Show real in-app experience, not mockups\n- Maintain consistency in design",
+                        benchmark: "24.3% conversion rate uplift potential",
+                        completed: false
+                    },
+                    {
+                        id: "2.3",
+                        title: "Design Informative Feature Graphic",
+                        description: "Eye-catching promotional banner",
+                        importance: "Medium",
+                        tips: "- Keep focal points centered\n- Use vibrant colors\n- Avoid taglines or pricing info\n- Focus on essence of app",
+                        benchmark: "Included in featured sections",
+                        completed: false
+                    },
+                    {
+                        id: "2.4",
+                        title: "Create Promo Video (15-30 seconds)",
+                        description: "Showcase real user experience",
+                        importance: "Medium",
+                        tips: "- Focus on in-app experience first 10 seconds\n- 80% video should be real user experience\n- Avoid people interacting with device\n- No sound required - users watch muted",
+                        benchmark: "17.4% conversion rate uplift potential",
+                        completed: false
+                    }
+                ]
+            },
+            {
+                id: 3,
+                title: "Store Listing Elements",
+                description: "Metadata and listing configuration",
+                items: [
+                    {
+                        id: "3.1",
+                        title: "Select Optimal Primary Category",
+                        description: "Choose category where users search most",
+                        importance: "High",
+                        tips: "- Pick category matching app's primary function\n- Research category competition\n- Analyze top apps in category\n- Don't change frequently (affects ranking history)",
+                        benchmark: "Minimum 3.0 stars for featuring eligibility",
+                        completed: false
+                    },
+                    {
+                        id: "3.2",
+                        title: "Add Secondary Category (if applicable)",
+                        description: "Additional visibility opportunity",
+                        importance: "Medium",
+                        tips: "- Only add if truly relevant\n- Secondary category should complement primary\n- Don't force irrelevant categories",
+                        benchmark: "Provides additional ranking opportunities",
+                        completed: false
+                    },
+                    {
+                        id: "3.3",
+                        title: "Optimize Developer Name with Keywords",
+                        description: "Indexed by Google Play algorithm",
+                        importance: "Low",
+                        tips: "- Include relevant keywords naturally\n- Keep it professional and credible\n- Reflect company or brand identity",
+                        benchmark: "Minimal impact but still beneficial",
+                        completed: false
+                    },
+                    {
+                        id: "3.4",
+                        title: "Use Relevant Google Play Tags",
+                        description: "Help with benchmarking and visibility",
+                        importance: "Medium",
+                        tips: "- Select tags that accurately describe app\n- Helps with algorithmic featuring\n- Use up to all available tags\n- Focus on relevant categories",
+                        benchmark: "Improves discoverability in app clusters",
+                        completed: false
+                    }
+                ]
+            },
+            {
+                id: 4,
+                title: "User Engagement & Reviews",
+                description: "Build reputation and engagement",
+                items: [
+                    {
+                        id: "4.1",
+                        title: "Actively Manage App Ratings & Reviews",
+                        description: "80% of featured apps have 4+ star rating",
+                        importance: "High",
+                        tips: "- Respond to ALL reviews promptly\n- Polite responses can convert 1-star to 4-star\n- Show you care about user feedback\n- Implement suggested improvements",
+                        benchmark: "Maintain minimum 3.0 stars for top charts, 4.0+ for featuring",
+                        completed: false
+                    },
+                    {
+                        id: "4.2",
+                        title: "Prompt Users for Reviews at Right Time",
+                        description: "Ask after positive moments in app",
+                        importance: "Medium",
+                        tips: "- Never ask after crashes or bugs\n- Ask after level completion, purchase, or reward\n- Use in-app prompts, not forced dialogs\n- Make process easy and quick",
+                        benchmark: "Increase positive review volume",
+                        completed: false
+                    },
+                    {
+                        id: "4.3",
+                        title: "Optimize User Experience to Reduce Negative Reviews",
+                        description: "Prevention is better than response",
+                        importance: "High",
+                        tips: "- Remove friction from user journey\n- Test and fix bugs before release\n- Ensure smooth onboarding\n- Make navigation intuitive",
+                        benchmark: "Directly impacts rating maintenance",
+                        completed: false
+                    },
+                    {
+                        id: "4.4",
+                        title: "Monitor Review Keywords for Insights",
+                        description: "Reviews are indexed and reveal user pain points",
+                        importance: "Medium",
+                        tips: "- Analyze keywords in reviews\n- Identify common feature requests\n- Track recurring complaints\n- Use insights for prioritization",
+                        benchmark: "Improve app based on user feedback",
+                        completed: false
+                    }
+                ]
+            },
+            {
+                id: 5,
+                title: "Technical Performance",
+                description: "Android Vitals and app quality",
+                items: [
+                    {
+                        id: "5.1",
+                        title: "Monitor & Minimize Crash Rate",
+                        description: "User-perceived crashes - critical Android Vital",
+                        importance: "High",
+                        tips: "- Set up Android Vitals dashboard\n- Monitor in Play Console regularly\n- Prioritize fixing frequent crashes\n- Test on various devices/OS versions",
+                        benchmark: "Keep crash rate below 1% of sessions",
+                        completed: false
+                    },
+                    {
+                        id: "5.2",
+                        title: "Reduce ANR (App Not Responding) Rate",
+                        description: "When app fails to respond to user input",
+                        importance: "High",
+                        tips: "- Optimize heavy operations\n- Use background threads\n- Monitor ANR dashboard\n- Test on lower-end devices",
+                        benchmark: "Keep ANR rate below 0.5% of sessions",
+                        completed: false
+                    },
+                    {
+                        id: "5.3",
+                        title: "Optimize Battery & Resource Usage",
+                        description: "Excessive battery drain affects ranking",
+                        importance: "Medium",
+                        tips: "- Minimize partial wake locks\n- Optimize background processes\n- Monitor battery usage patterns\n- Test on real devices",
+                        benchmark: "Avoid excessive partial wake locks",
+                        completed: false
+                    },
+                    {
+                        id: "5.4",
+                        title: "Ensure Smooth Performance Across Devices",
+                        description: "Test on various device configurations",
+                        importance: "High",
+                        tips: "- Test on low-end devices\n- Monitor performance metrics\n- Optimize for different Android versions\n- Check memory and CPU usage",
+                        benchmark: "Seamless experience across 95%+ device configurations",
+                        completed: false
+                    }
+                ]
+            },
+            {
+                id: 6,
+                title: "Install & Retention Metrics",
+                description: "Key indicators of app success",
+                items: [
+                    {
+                        id: "6.1",
+                        title: "Drive Consistent Install Volume",
+                        description: "Number and frequency of installs impact ranking",
+                        importance: "High",
+                        tips: "- Use paid campaigns strategically\n- Build external traffic sources\n- Get mentioned in app roundups\n- Maintain steady download velocity",
+                        benchmark: "Consistent daily/weekly installs show relevance",
+                        completed: false
+                    },
+                    {
+                        id: "6.2",
+                        title: "Track & Improve Retention Rate",
+                        description: "Percentage of users who continue using app",
+                        importance: "High",
+                        tips: "- Focus on Day 1, Day 7, Day 30 retention\n- Identify where users drop off\n- Improve onboarding experience\n- Add engaging features and content",
+                        benchmark: "Aim for minimum 30% Day 30 retention",
+                        completed: false
+                    },
+                    {
+                        id: "6.3",
+                        title: "Monitor DAU/MAU Ratio",
+                        description: "Daily to Monthly Active Users - loyalty indicator",
+                        importance: "Medium",
+                        tips: "- Track ratio regularly\n- Higher ratio = more loyal users\n- Compare against competitors\n- Focus on increasing daily engagement",
+                        benchmark: "Aim for 20%+ DAU/MAU ratio",
+                        completed: false
+                    },
+                    {
+                        id: "6.4",
+                        title: "Analyze User Engagement & Session Length",
+                        description: "How actively users interact with app",
+                        importance: "Medium",
+                        tips: "- Track average session length\n- Monitor session frequency\n- Identify high-engagement features\n- Optimize low-engagement areas",
+                        benchmark: "Increasing session length = stronger engagement signal",
+                        completed: false
+                    }
+                ]
+            },
+            {
+                id: 7,
+                title: "A/B Testing & Experimentation",
+                description: "Data-driven optimization",
+                items: [
+                    {
+                        id: "7.1",
+                        title: "Run Store Listing Experiments (A/B Tests)",
+                        description: "Test different store listing elements",
+                        importance: "High",
+                        tips: "- Test one element at a time\n- Run tests for minimum 2 weeks\n- Ensure statistical significance (90%+ confidence)\n- Note: Play Console splits audience 50/50\n- Don't run multiple experiments simultaneously",
+                        benchmark: "10%+ statistical significance level for decision",
+                        completed: false
+                    },
+                    {
+                        id: "7.2",
+                        title: "A/B Test Creative Assets",
+                        description: "Icons, screenshots, and videos",
+                        importance: "Medium",
+                        tips: "- Test different design styles\n- Try different color schemes\n- Test different feature highlights\n- Use Play Console experiments feature",
+                        benchmark: "Icons can improve conversion by 20.2%",
+                        completed: false
+                    },
+                    {
+                        id: "7.3",
+                        title: "Monitor Conversion Rate by Traffic Source",
+                        description: "Track Store Listing Conversion Rate",
+                        importance: "High",
+                        tips: "- Measure conversions from Search traffic\n- Track Explore traffic separately\n- Monitor Third-Party Referrer conversions\n- Identify best-performing sources",
+                        benchmark: "Aim to increase conversion rate month-over-month",
+                        completed: false
+                    },
+                    {
+                        id: "7.4",
+                        title: "Iterate Based on Test Results",
+                        description: "Implement winning variations",
+                        importance: "High",
+                        tips: "- Set winning tests as new control\n- Plan next iteration based on learnings\n- Document all results\n- Maintain test calendar",
+                        benchmark: "Continuous 2-5% monthly improvements",
+                        completed: false
+                    }
+                ]
+            },
+            {
+                id: 8,
+                title: "Getting Featured",
+                description: "Increase visibility through featuring",
+                items: [
+                    {
+                        id: "8.1",
+                        title: "Meet Featured App Eligibility Requirements",
+                        description: "Baseline requirements for featuring consideration",
+                        importance: "High",
+                        tips: "- Comply with policy and design guidelines\n- Launch across platforms simultaneously\n- Maintain minimum 3.0 star rating\n- Optimize device support (phones, tablets, wearables)\n- Submit APK/AAB 3 weeks before launch",
+                        benchmark: "Minimum 3.0 stars, compliance with all guidelines",
+                        completed: false
+                    },
+                    {
+                        id: "8.2",
+                        title: "Localize Store Listing Globally",
+                        description: "Required for featuring in multiple markets",
+                        importance: "High",
+                        tips: "- Translate metadata for key markets\n- Adapt screenshots and videos for regions\n- Use cultural appropriate imagery\n- Test localized app functionality\n- Run store listing experiments per region",
+                        benchmark: "Localize for top 5-10 markets",
+                        completed: false
+                    },
+                    {
+                        id: "8.3",
+                        title: "Follow Material Design Guidelines",
+                        description: "User interaction and visual design requirements",
+                        importance: "High",
+                        tips: "- Follow Material Design 3 guidelines\n- Use proper animations (under 300ms)\n- Align elements to 3 keylines\n- Implement ripple effects\n- Ensure authentic motion",
+                        benchmark: "Compliance required for editorial featuring",
+                        completed: false
+                    },
+                    {
+                        id: "8.4",
+                        title: "Include Landscape Screenshots & Video",
+                        description: "Critical for game and visual app featuring",
+                        importance: "Medium",
+                        tips: "- Add at least 3 landscape screenshots\n- Include feature video in landscape\n- Ensure high visual quality\n- Showcase game/app in action",
+                        benchmark: "Landscape assets required for games",
+                        completed: false
+                    }
+                ]
+            },
+            {
+                id: 9,
+                title: "Ongoing Optimization",
+                description: "Continuous improvement and monitoring",
+                items: [
+                    {
+                        id: "9.1",
+                        title: "Build High-Quality Backlinks",
+                        description: "External authority signals ranking",
+                        importance: "Medium",
+                        tips: "- Get mentioned in app roundups\n- Secure press coverage and backlinks\n- Build website links to app page\n- Use deep linking for installations\n- Focus on referral traffic volume",
+                        benchmark: "Each quality backlink improves authority",
+                        completed: false
+                    },
+                    {
+                        id: "9.2",
+                        title: "Release Regular App Updates",
+                        description: "Shows active development and commitment",
+                        importance: "High",
+                        tips: "- Update at least every 1-2 months\n- Fix bugs and improve performance\n- Add meaningful new features\n- Update What's New section\n- Document changes in release notes",
+                        benchmark: "Monthly updates preferred",
+                        completed: false
+                    },
+                    {
+                        id: "9.3",
+                        title: "Monitor Competitor Performance",
+                        description: "Stay ahead of market trends",
+                        importance: "Medium",
+                        tips: "- Track competitor keywords and rankings\n- Analyze their store listings\n- Monitor their updates and features\n- Benchmark ratings and reviews\n- Identify market opportunities",
+                        benchmark: "Quarterly competitive analysis",
+                        completed: false
+                    },
+                    {
+                        id: "9.4",
+                        title: "Track & Respond to Algorithm Changes",
+                        description: "Play Store algorithm updates frequently",
+                        importance: "High",
+                        tips: "- Monitor ranking fluctuations\n- Stay updated on ASO news\n- Adapt strategy based on algorithm signals\n- Keep testing and iterating\n- Maintain data-driven approach",
+                        benchmark: "Responsive optimization prevents ranking drops",
+                        completed: false
+                    }
+                ]
+            }
+        ];
+
+        // State management
+        let appState = {
+            sections: JSON.parse(JSON.stringify(checklistData)),
+            searchQuery: '',
+            expandedSections: new Set(),
+            expandedItems: new Set()
+        };
+
+        // Initialize app
+        function init() {
+            renderSections();
+            updateProgress();
+            setupEventListeners();
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            document.getElementById('searchBox').addEventListener('input', handleSearch);
+            document.getElementById('expandAllBtn').addEventListener('click', expandAll);
+            document.getElementById('collapseAllBtn').addEventListener('click', collapseAll);
+            document.getElementById('exportBtn').addEventListener('click', exportProgress);
+        }
+
+        // Render sections
+        function renderSections() {
+            const grid = document.getElementById('sectionsGrid');
+            const emptyState = document.getElementById('emptyState');
+            
+            const filteredSections = filterSections();
+            
+            if (filteredSections.length === 0) {
+                grid.style.display = 'none';
+                emptyState.style.display = 'block';
+                return;
+            }
+            
+            grid.style.display = 'grid';
+            emptyState.style.display = 'none';
+            
+            grid.innerHTML = filteredSections.map(section => {
+                const completedItems = section.items.filter(item => item.completed).length;
+                const totalItems = section.items.length;
+                const isExpanded = appState.expandedSections.has(section.id);
+                
+                return `
+                    <div class="section-card ${isExpanded ? 'expanded' : ''}" data-section-id="${section.id}">
+                        <div class="section-header" onclick="toggleSection(${section.id})">
+                            <div class="section-header-content">
+                                <div class="section-info">
+                                    <h3 class="section-title">${section.title}</h3>
+                                    <p class="section-description">${section.description}</p>
+                                    <div class="section-progress">${completedItems}/${totalItems} completed</div>
+                                </div>
+                                <div class="section-expand-icon">▼</div>
+                            </div>
+                        </div>
+                        <div class="section-content">
+                            <div class="section-items">
+                                ${section.items.map(item => renderItem(item, section.id)).join('')}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Render individual item
+        function renderItem(item, sectionId) {
+            const isExpanded = appState.expandedItems.has(item.id);
+            const priorityClass = `priority-${item.importance.toLowerCase()}`;
+            
+            return `
+                <div class="checklist-item ${item.completed ? 'completed' : ''} ${isExpanded ? 'expanded' : ''}" data-item-id="${item.id}">
+                    <div class="item-header">
+                        <div class="item-checkbox-container">
+                            <input 
+                                type="checkbox" 
+                                class="item-checkbox" 
+                                ${item.completed ? 'checked' : ''}
+                                onchange="toggleItemComplete('${item.id}', ${sectionId})"
+                                onclick="event.stopPropagation()"
+                            >
+                        </div>
+                        <div class="item-content" onclick="toggleItem('${item.id}')">
+                            <div class="item-title-row">
+                                <span class="item-title">${item.title}</span>
+                                <span class="priority-badge ${priorityClass}">${item.importance}</span>
+                            </div>
+                            <p class="item-description">${item.description}</p>
+                        </div>
+                    </div>
+                    <div class="item-details">
+                        <div class="item-details-content">
+                            <div class="detail-section">
+                                <span class="detail-label">💡 Best Practices &amp; Tips:</span>
+                                <div class="detail-content">${item.tips}</div>
+                            </div>
+                            <div class="detail-section">
+                                <span class="detail-label">🎯 Target Benchmark:</span>
+                                <div class="detail-content"><strong>${item.benchmark}</strong></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Toggle section expansion
+        function toggleSection(sectionId) {
+            if (appState.expandedSections.has(sectionId)) {
+                appState.expandedSections.delete(sectionId);
+            } else {
+                appState.expandedSections.add(sectionId);
+            }
+            renderSections();
+        }
+
+        // Toggle item expansion
+        function toggleItem(itemId) {
+            if (appState.expandedItems.has(itemId)) {
+                appState.expandedItems.delete(itemId);
+            } else {
+                appState.expandedItems.add(itemId);
+            }
+            renderSections();
+        }
+
+        // Toggle item completion
+        function toggleItemComplete(itemId, sectionId) {
+            const section = appState.sections.find(s => s.id === sectionId);
+            if (section) {
+                const item = section.items.find(i => i.id === itemId);
+                if (item) {
+                    item.completed = !item.completed;
+                    updateProgress();
+                    renderSections();
+                }
+            }
+        }
+
+        // Update progress
+        function updateProgress() {
+            let totalItems = 0;
+            let completedItems = 0;
+            let sectionsFullyCompleted = 0;
+            
+            appState.sections.forEach(section => {
+                totalItems += section.items.length;
+                const sectionCompleted = section.items.filter(item => item.completed).length;
+                completedItems += sectionCompleted;
+                
+                if (sectionCompleted === section.items.length) {
+                    sectionsFullyCompleted++;
+                }
+            });
+            
+            const percentage = totalItems > 0 ? Math.round((completedItems / totalItems) * 100) : 0;
+            
+            document.getElementById('progressPercentage').textContent = `${percentage}%`;
+            document.getElementById('progressBarFill').style.width = `${percentage}%`;
+            document.getElementById('completedCount').textContent = completedItems;
+            document.getElementById('totalCount').textContent = totalItems;
+            document.getElementById('sectionsCompleted').textContent = sectionsFullyCompleted;
+        }
+
+        // Filter sections based on search
+        function filterSections() {
+            if (!appState.searchQuery) {
+                return appState.sections;
+            }
+            
+            const query = appState.searchQuery.toLowerCase();
+            
+            return appState.sections.map(section => {
+                const matchingItems = section.items.filter(item => {
+                    return item.title.toLowerCase().includes(query) ||
+                           item.description.toLowerCase().includes(query) ||
+                           item.tips.toLowerCase().includes(query) ||
+                           item.benchmark.toLowerCase().includes(query) ||
+                           item.importance.toLowerCase().includes(query);
+                });
+                
+                if (matchingItems.length > 0) {
+                    return {
+                        ...section,
+                        items: matchingItems
+                    };
+                }
+                
+                if (section.title.toLowerCase().includes(query) || 
+                    section.description.toLowerCase().includes(query)) {
+                    return section;
+                }
+                
+                return null;
+            }).filter(section => section !== null);
+        }
+
+        // Handle search
+        function handleSearch(event) {
+            appState.searchQuery = event.target.value;
+            renderSections();
+        }
+
+        // Expand all sections
+        function expandAll() {
+            appState.sections.forEach(section => {
+                appState.expandedSections.add(section.id);
+            });
+            renderSections();
+        }
+
+        // Collapse all sections
+        function collapseAll() {
+            appState.expandedSections.clear();
+            appState.expandedItems.clear();
+            renderSections();
+        }
+
+        // Export progress
+        function exportProgress() {
+            let totalItems = 0;
+            let completedItems = 0;
+            
+            const report = appState.sections.map(section => {
+                const sectionCompleted = section.items.filter(item => item.completed).length;
+                const sectionTotal = section.items.length;
+                totalItems += sectionTotal;
+                completedItems += sectionCompleted;
+                
+                const items = section.items.map(item => {
+                    return `  [${item.completed ? 'X' : ' '}] ${item.title} (${item.importance} Priority)`;
+                }).join('\n');
+                
+                return `${section.title} (${sectionCompleted}/${sectionTotal})\n${items}`;
+            }).join('\n\n');
+            
+            const percentage = totalItems > 0 ? Math.round((completedItems / totalItems) * 100) : 0;
+            
+            const fullReport = `Google Play Store ASO Checklist Progress Report\n` +
+                             `Generated: ${new Date().toLocaleString()}\n` +
+                             `Overall Progress: ${percentage}% (${completedItems}/${totalItems} items)\n\n` +
+                             `${'='.repeat(60)}\n\n${report}`;
+            
+            // Create downloadable file
+            const blob = new Blob([fullReport], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `ASO-Checklist-Progress-${new Date().toISOString().split('T')[0]}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+  // NOTE: Initialization is performed by the Auth Guard below.
+  // Do NOT call init() here — it will be invoked from the auth
+  // state changed handler when a user is present.
+    </script>
+    <script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-analytics.js";
+  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyBalB604BqNpNA9DtFxixDXztL-x1uMZgA",
+    authDomain: "aso-checklist.firebaseapp.com",
+    projectId: "aso-checklist",
+    storageBucket: "aso-checklist.firebasestorage.app",
+    messagingSenderId: "31619738793",
+    appId: "1:31619738793:web:481ea619882b3dd2b48db8",
+    measurementId: "G-4JDEJQLDWJ",
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  // Hide app until auth resolves
+  document.querySelector(".app-container").style.display = "none";
+
+  onAuthStateChanged(auth, (user) => {
+    if (!user) {
+      window.location.href = "login.html";
+      return;
+    }
+    // Show app & launch your existing code
+    document.querySelector(".app-container").style.display = "";
+    // If your script auto-calls init(), remove that and call here:
+    if (typeof init === "function") init();
+  });
+
+  // Optional: add a logout button somewhere in your header:
+  // <button id="logoutBtn" class="btn btn-secondary">Logout</button>
+  document.addEventListener("click", (e) => {
+    if (e.target && e.target.id === "logoutBtn") {
+      signOut(auth).then(() => (window.location.href = "login.html"));
+    }
+  });
+  </script>
+</body>
+</html>
