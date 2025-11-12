@@ -353,17 +353,29 @@ body {
   background: var(--color-secondary-hover);
 }
 
-/* Sections Grid */
+/* Sections Grid - JS-driven masonry to preserve left-to-right ordering */
 .sections-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-  gap: var(--space-24);
+  width: 100%;
+  /* container will receive column elements inserted by JS */
 }
 
-@media (max-width: 768px) {
-  .sections-grid {
-    grid-template-columns: 1fr;
-  }
+/* masonry columns container */
+.masonry-columns {
+  display: flex;
+  gap: var(--space-24);
+  align-items: flex-start;
+}
+
+.masonry-column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-24);
+  flex: 1 1 0;
+}
+
+.section-card {
+  width: 100%;
+  display: block;
 }
 
 /* Section Card */
@@ -546,6 +558,12 @@ body {
   padding-top: var(--space-16);
 }
 
+/* Subtle opacity & slide for inner content to make expands smoother */
+.section-items, .item-details-content {
+  transition: opacity 220ms ease, transform 220ms ease;
+  will-change: opacity, transform;
+}
+
 .detail-section {
   margin-bottom: var(--space-16);
 }
@@ -654,14 +672,12 @@ body {
             </div>
         </div>
 
-        <!-- Controls -->
-        <div class="controls">
-            <input type="text" class="search-box" id="searchBox" placeholder="Search checklist items...">
-            <button class="btn btn-secondary" id="expandAllBtn">Expand All</button>
-            <button class="btn btn-secondary" id="collapseAllBtn">Collapse All</button>
-            <button class="btn btn-primary" id="exportBtn">Export Progress</button>
-            <button class="btn btn-secondary" onclick="window.print()">Print</button>
-        </div>
+    <!-- Controls -->
+    <div class="controls">
+      <input type="text" class="search-box" id="searchBox" placeholder="Search checklist items...">
+      <button class="btn btn-secondary" id="expandAllBtn">Expand All</button>
+      <button class="btn btn-secondary" id="collapseAllBtn">Collapse All</button>
+    </div>
 
         <!-- Sections Grid -->
         <div class="sections-grid" id="sectionsGrid"></div>
@@ -1073,19 +1089,65 @@ body {
             expandedItems: new Set()
         };
 
+    // Load saved notes/saved-flags from localStorage into appState
+    (function hydrateNotesFromStorage() {
+      try {
+        appState.sections.forEach(section => {
+          section.items.forEach(item => {
+            const noteKey = `note_${item.id}`;
+            const savedKey = `note_saved_${item.id}`;
+            const storedNote = localStorage.getItem(noteKey);
+            const storedSaved = localStorage.getItem(savedKey);
+            item.note = storedNote || '';
+            item.noteSaved = storedSaved === '1';
+          });
+        });
+      } catch (e) {
+        console.warn('Unable to load notes from storage', e);
+      }
+    })();
+
         // Initialize app
         function init() {
-            renderSections();
+      // Hydrate expanded state (sections & items) from storage so users keep what they opened
+      hydrateExpandedState();
+      renderSections();
             updateProgress();
             setupEventListeners();
         }
+
+    // Persist and hydrate expanded sections/items so user UI state is preserved across refresh
+    function hydrateExpandedState() {
+      try {
+        const sectionsJson = localStorage.getItem('expanded_sections');
+        const itemsJson = localStorage.getItem('expanded_items');
+        if (sectionsJson) {
+          const arr = JSON.parse(sectionsJson);
+          appState.expandedSections = new Set(arr);
+        }
+        if (itemsJson) {
+          const arr2 = JSON.parse(itemsJson);
+          appState.expandedItems = new Set(arr2);
+        }
+      } catch (e) {
+        console.warn('Failed to hydrate expanded state', e);
+      }
+    }
+
+    function saveExpandedState() {
+      try {
+        localStorage.setItem('expanded_sections', JSON.stringify([...appState.expandedSections]));
+        localStorage.setItem('expanded_items', JSON.stringify([...appState.expandedItems]));
+      } catch (e) {
+        console.warn('Failed to save expanded state', e);
+      }
+    }
 
         // Setup event listeners
         function setupEventListeners() {
             document.getElementById('searchBox').addEventListener('input', handleSearch);
             document.getElementById('expandAllBtn').addEventListener('click', expandAll);
             document.getElementById('collapseAllBtn').addEventListener('click', collapseAll);
-            document.getElementById('exportBtn').addEventListener('click', exportProgress);
         }
 
         // Render sections
@@ -1104,7 +1166,7 @@ body {
             grid.style.display = 'grid';
             emptyState.style.display = 'none';
             
-            grid.innerHTML = filteredSections.map(section => {
+      grid.innerHTML = filteredSections.map(section => {
                 const completedItems = section.items.filter(item => item.completed).length;
                 const totalItems = section.items.length;
                 const isExpanded = appState.expandedSections.has(section.id);
@@ -1128,15 +1190,21 @@ body {
                         </div>
                     </div>
                 `;
-            }).join('');
+      }).join('');
+      // After the DOM is updated, arrange masonry columns and then apply expand heights
+      requestAnimationFrame(() => {
+        if (typeof applyMasonry === 'function') applyMasonry();
+        if (typeof applyExpandHeights === 'function') applyExpandHeights();
+      });
         }
 
         // Render individual item
         function renderItem(item, sectionId) {
             const isExpanded = appState.expandedItems.has(item.id);
             const priorityClass = `priority-${item.importance.toLowerCase()}`;
-            
-            return `
+      const noteValue = item.note ? escapeHtml(item.note) : '';
+
+      return `
                 <div class="checklist-item ${item.completed ? 'completed' : ''} ${isExpanded ? 'expanded' : ''}" data-item-id="${item.id}">
                     <div class="item-header">
                         <div class="item-checkbox-container">
@@ -1166,11 +1234,165 @@ body {
                                 <span class="detail-label">🎯 Target Benchmark:</span>
                                 <div class="detail-content"><strong>${item.benchmark}</strong></div>
                             </div>
+              <div class="detail-section">
+                <span class="detail-label">📝 Findings:</span>
+                <div class="detail-content">
+                  <textarea id="note-${item.id}" rows="3" style="width:100%; padding:8px; border-radius:6px; border:1px solid var(--color-card-border-inner); background:var(--color-surface); color:var(--color-text);">${noteValue}</textarea>
+                  <div style="margin-top:8px; display:flex; gap:8px; align-items:center;">
+                    <button class="btn btn-primary" onclick="event.stopPropagation(); saveItemNote('${item.id}', ${sectionId});">Save Findings</button>
+                    <button class="btn btn-secondary" onclick="event.stopPropagation(); clearItemNote('${item.id}', ${sectionId});">Clear</button>
+                    <span id="note-status-${item.id}" style="font-size:12px; color:var(--color-text-secondary); margin-left:8px;">${item.noteSaved ? 'Saved' : 'Not saved'}</span>
+                  </div>
+                </div>
+              </div>
                         </div>
                     </div>
                 </div>
             `;
         }
+
+    // Small helper to avoid injecting raw HTML from saved notes
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    // Smooth expand/collapse: measure scrollHeight and set max-height so animations don't jump
+    function applyExpandHeights() {
+      // Sections
+      document.querySelectorAll('.section-card').forEach(card => {
+        const content = card.querySelector('.section-content');
+        if (!content) return;
+        content.style.overflow = 'hidden';
+        content.style.transition = 'max-height 260ms ease';
+        const innerItems = card.querySelector('.section-items');
+        if (card.classList.contains('expanded')) {
+          // prepare inner for fade/slide
+          if (innerItems) {
+            innerItems.style.opacity = '0';
+            innerItems.style.transform = 'translateY(-6px)';
+          }
+          // set to 0 first so transition runs
+          content.style.maxHeight = '0px';
+          // next frame, expand to the measured height and fade in inner
+          requestAnimationFrame(() => {
+            content.style.maxHeight = content.scrollHeight + 'px';
+            if (innerItems) {
+              innerItems.style.transition = 'opacity 220ms ease, transform 220ms ease';
+              innerItems.style.opacity = '1';
+              innerItems.style.transform = 'translateY(0)';
+            }
+          });
+        } else {
+          // collapse: fade out inner then collapse height
+          if (innerItems) {
+            innerItems.style.transition = 'opacity 180ms ease, transform 180ms ease';
+            innerItems.style.opacity = '0';
+            innerItems.style.transform = 'translateY(-6px)';
+          }
+          requestAnimationFrame(() => { content.style.maxHeight = '0px'; });
+        }
+      });
+
+      // Item details
+      document.querySelectorAll('.checklist-item').forEach(item => {
+        const details = item.querySelector('.item-details');
+        if (!details) return;
+        details.style.overflow = 'hidden';
+        details.style.transition = 'max-height 220ms ease';
+        const inner = item.querySelector('.item-details-content');
+        if (item.classList.contains('expanded')) {
+          if (inner) {
+            inner.style.opacity = '0';
+            inner.style.transform = 'translateY(-6px)';
+          }
+          details.style.maxHeight = '0px';
+          requestAnimationFrame(() => {
+            details.style.maxHeight = details.scrollHeight + 'px';
+            if (inner) {
+              inner.style.transition = 'opacity 200ms ease, transform 200ms ease';
+              inner.style.opacity = '1';
+              inner.style.transform = 'translateY(0)';
+            }
+          });
+        } else {
+          if (inner) {
+            inner.style.transition = 'opacity 160ms ease, transform 160ms ease';
+            inner.style.opacity = '0';
+            inner.style.transform = 'translateY(-6px)';
+          }
+          requestAnimationFrame(() => { details.style.maxHeight = '0px'; });
+        }
+      });
+
+      // After animation, allow natural height for expanded elements (so content changes don't get clipped)
+      setTimeout(() => {
+        document.querySelectorAll('.section-card.expanded .section-content, .checklist-item.expanded .item-details').forEach(el => {
+          try { el.style.maxHeight = 'none'; } catch (e) {}
+        });
+      }, 350);
+    }
+
+    // Debounce helper
+    function debounce(fn, wait) {
+      let t = null;
+      return (...args) => {
+        clearTimeout(t);
+        t = setTimeout(() => fn(...args), wait);
+      };
+    }
+
+    // JS masonry layout that preserves left-to-right order.
+    // We take the sequential .section-card nodes and distribute them into N columns using index % N.
+    function applyMasonry() {
+      const container = document.getElementById('sectionsGrid');
+      if (!container) return;
+
+      // Gather all cards (they are direct children after render)
+      const cards = Array.from(container.querySelectorAll('.section-card'));
+
+      // Remove any existing masonry wrapper
+      const existing = container.querySelector('.masonry-columns');
+      if (existing) existing.remove();
+
+      if (cards.length === 0) return;
+
+      // Determine columns count based on container width and preferred column width
+      const containerWidth = container.clientWidth || container.getBoundingClientRect().width;
+      const preferredCol = 400; // px
+      let cols = Math.max(1, Math.floor(containerWidth / preferredCol));
+      // Limit to reasonable max
+      cols = Math.min(cols, Math.ceil(cards.length));
+
+      // Create wrapper and columns
+      const wrapper = document.createElement('div');
+      wrapper.className = 'masonry-columns';
+
+      const columns = [];
+      for (let i = 0; i < cols; i++) {
+        const col = document.createElement('div');
+        col.className = 'masonry-column';
+        columns.push(col);
+        wrapper.appendChild(col);
+      }
+
+      // Distribute cards preserving left-to-right order (index % cols)
+      cards.forEach((card, idx) => {
+        const target = columns[idx % cols];
+        target.appendChild(card);
+      });
+
+      container.appendChild(wrapper);
+    }
+
+    // Recompute masonry on resize
+    window.addEventListener('resize', debounce(() => {
+      try { applyMasonry(); applyExpandHeights(); } catch (e) {}
+    }, 120));
 
         // Toggle section expansion
         function toggleSection(sectionId) {
@@ -1179,7 +1401,8 @@ body {
             } else {
                 appState.expandedSections.add(sectionId);
             }
-            renderSections();
+      saveExpandedState();
+      renderSections();
         }
 
         // Toggle item expansion
@@ -1189,7 +1412,8 @@ body {
             } else {
                 appState.expandedItems.add(itemId);
             }
-            renderSections();
+      saveExpandedState();
+      renderSections();
         }
 
         // Toggle item completion
@@ -1198,12 +1422,88 @@ body {
             if (section) {
                 const item = section.items.find(i => i.id === itemId);
                 if (item) {
-                    item.completed = !item.completed;
-                    updateProgress();
-                    renderSections();
+          // If the item is currently NOT completed and the user is trying to check it,
+          // require that they have saved a non-empty Findings note first.
+            if (!item.completed && !item.noteSaved) {
+            // block check
+            alert('Please save Findings for this item before checking it.');
+            // expand the item so Findings UI is visible
+            appState.expandedItems.add(item.id);
+            saveExpandedState();
+            renderSections();
+            return;
+          }
+
+          // Toggle completion
+          item.completed = !item.completed;
+          // Persist completion to Firestore if available
+          try {
+            if (window && typeof window.setProgressDoc === 'function' && window.auth && window.auth.currentUser) {
+              window.setProgressDoc(window.auth.currentUser.uid, itemId, { completed: item.completed, note: item.note || '' });
+            }
+          } catch (e) {
+            console.warn('Failed to persist completion', e);
+          }
+          updateProgress();
+          renderSections();
                 }
             }
         }
+
+    // Save note for an item (persist to localStorage and mark saved)
+    function saveItemNote(itemId, sectionId) {
+      const section = appState.sections.find(s => s.id === sectionId);
+      if (!section) return;
+      const item = section.items.find(i => i.id === itemId);
+      if (!item) return;
+      const ta = document.getElementById(`note-${itemId}`);
+      if (!ta) return;
+      const val = ta.value || '';
+      item.note = val;
+      item.noteSaved = val.trim().length > 0;
+      try {
+        localStorage.setItem(`note_${itemId}`, val);
+        localStorage.setItem(`note_saved_${itemId}`, item.noteSaved ? '1' : '0');
+      } catch (e) {
+        console.warn('Unable to persist note to localStorage', e);
+      }
+      // If Firestore helper is available and user is signed in, persist note there too
+      try {
+        if (window && typeof window.setProgressDoc === 'function' && window.auth && window.auth.currentUser) {
+          window.setProgressDoc(window.auth.currentUser.uid, itemId, { note: val, completed: item.completed });
+        }
+      } catch (e) {
+        console.warn('Failed to persist note to Firestore', e);
+      }
+      const status = document.getElementById(`note-status-${itemId}`);
+      if (status) status.textContent = item.noteSaved ? 'Saved' : 'Not saved';
+      // give visual feedback by briefly changing the button text (optional)
+      renderSections();
+    }
+
+    function clearItemNote(itemId, sectionId) {
+      const section = appState.sections.find(s => s.id === sectionId);
+      if (!section) return;
+      const item = section.items.find(i => i.id === itemId);
+      if (!item) return;
+      item.note = '';
+      item.noteSaved = false;
+      try {
+        localStorage.removeItem(`note_${itemId}`);
+        localStorage.setItem(`note_saved_${itemId}`, '0');
+      } catch (e) {
+        console.warn('Unable to update storage', e);
+      }
+      // Also clear in Firestore if available
+      try {
+        if (window && typeof window.setProgressDoc === 'function' && window.auth && window.auth.currentUser) {
+          window.setProgressDoc(window.auth.currentUser.uid, itemId, { note: '', completed: item.completed });
+        }
+      } catch (e) {
+        console.warn('Failed to clear note in Firestore', e);
+      }
+      renderSections();
+    }
 
         // Update progress
         function updateProgress() {
@@ -1274,14 +1574,16 @@ body {
             appState.sections.forEach(section => {
                 appState.expandedSections.add(section.id);
             });
-            renderSections();
+      saveExpandedState();
+      renderSections();
         }
 
         // Collapse all sections
         function collapseAll() {
             appState.expandedSections.clear();
             appState.expandedItems.clear();
-            renderSections();
+      try { localStorage.removeItem('expanded_sections'); localStorage.removeItem('expanded_items'); } catch (e) {}
+      renderSections();
         }
 
         // Export progress
@@ -1330,6 +1632,7 @@ body {
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
   import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-analytics.js";
   import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
+  import { getFirestore, doc, setDoc, onSnapshot, collection, query, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
   // TODO: Add SDKs for Firebase products that you want to use
   // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -1347,6 +1650,7 @@ body {
 
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
+  const db = getFirestore(app);
 
   // Hide app until auth resolves
   document.querySelector(".app-container").style.display = "none";
@@ -1363,7 +1667,55 @@ body {
     if (logoutBtn) logoutBtn.style.display = '';
     document.querySelector(".app-container").style.display = "";
     if (typeof init === "function") init();
+    // After init, subscribe to user's saved progress (notes + completed)
+    subscribeToUserProgress(user.uid);
   });
+
+  // Persist a user's progress (note + completed) into a 'progress' collection
+  async function setProgressDoc(userId, itemId, { completed = undefined, note = undefined } = {}) {
+    if (!userId || !itemId) return;
+    const key = `${userId}_${itemId}`;
+    const data = {
+      userId,
+      itemId,
+      updatedAt: serverTimestamp()
+    };
+    if (typeof completed !== 'undefined') data.completed = !!completed;
+    if (typeof note !== 'undefined') data.note = note;
+    try {
+      await setDoc(doc(db, 'progress', key), data, { merge: true });
+    } catch (e) {
+      console.error('Failed to write progress to Firestore', e);
+    }
+  }
+
+  // Listen to all progress docs for the user and apply them to appState
+  function subscribeToUserProgress(userId) {
+    if (!userId) return () => {};
+    const q = query(collection(db, 'progress'), where('userId', '==', userId));
+    return onSnapshot(q, (snapshot) => {
+      snapshot.docs.forEach(d => {
+        const data = d.data();
+        const itemId = data.itemId;
+        const completed = !!data.completed;
+        const note = typeof data.note === 'string' ? data.note : '';
+        // apply to appState
+        for (const section of appState.sections) {
+          const item = section.items.find(i => i.id === itemId);
+          if (item) {
+            item.completed = completed;
+            item.note = note;
+            item.noteSaved = note.trim().length > 0;
+          }
+        }
+      });
+      // re-render and update progress
+      updateProgress();
+      renderSections();
+    }, (err) => {
+      console.error('Progress snapshot error', err);
+    });
+  }
 
   // Optional: add a logout button somewhere in your header:
   // <button id="logoutBtn" class="btn btn-secondary">Logout</button>
@@ -1372,6 +1724,12 @@ body {
       signOut(auth).then(() => (window.location.href = "login.html"));
     }
   });
+
+  // Expose Firestore helper to the page scripts
+  window.setProgressDoc = setProgressDoc;
+  window.subscribeToUserProgress = subscribeToUserProgress;
+  window.db = db;
+  window.auth = auth;
   </script>
 </body>
 </html>
