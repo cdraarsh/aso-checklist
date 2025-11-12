@@ -3,42 +3,317 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Sign in — ASO Checklist</title>
+    <title>ASO Checklist — Sign In & Sign Up</title>
     <style>
-      /* Minimal styles so the form is usable during preview */
-      body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #fff; color: #111; padding: 24px; }
-      .card { max-width:420px; margin:32px auto; border:1px solid #eee; padding:20px; border-radius:10px; box-shadow:0 4px 14px rgba(16,24,40,0.04); }
-      .row { margin-bottom:12px; }
-      input[type=email], input[type=password] { width:100%; padding:10px 12px; border:1px solid #ddd; border-radius:8px; }
-      .primary { background:#217f8d; color:#fff; border:none; padding:10px 14px; border-radius:8px; cursor:pointer; }
-      .google { background:#fff; border:1px solid #ddd; padding:10px 14px; border-radius:8px; cursor:pointer; width:100%; margin-top:8px }
-      .error { color:#b71c1c; margin-top:8px }
-      .muted { margin-top:12px; color:#666 }
+      /* Enhanced styles for login/signup */
+      body { 
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+        color: #111; 
+        padding: 24px; 
+        min-height: 100vh; 
+        margin: 0;
+      }
+      .container { 
+        max-width: 900px; 
+        margin: 0 auto; 
+        display: grid; 
+        grid-template-columns: 1fr 420px; 
+        gap: 40px; 
+        align-items: center; 
+      }
+      @media (max-width: 768px) {
+        .container { grid-template-columns: 1fr; text-align: center; }
+      }
+      
+      .hero {
+        color: white;
+      }
+      .hero h1 { 
+        font-size: 2.5rem; 
+        font-weight: 700; 
+        margin-bottom: 16px; 
+        line-height: 1.2; 
+      }
+      .hero p { 
+        font-size: 1.1rem; 
+        margin-bottom: 24px; 
+        opacity: 0.9; 
+        line-height: 1.5; 
+      }
+      .hero ul {
+        list-style: none;
+        padding: 0;
+        margin: 24px 0;
+      }
+      .hero li {
+        padding: 8px 0;
+        display: flex;
+        align-items: center;
+        font-size: 1rem;
+      }
+      .hero li:before {
+        content: "✓";
+        margin-right: 12px;
+        background: #4ade80;
+        color: white;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: bold;
+      }
+      
+      .auth-card { 
+        max-width: 420px; 
+        margin: 0 auto; 
+        border: none; 
+        padding: 32px; 
+        border-radius: 16px; 
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        background: white;
+      }
+      .auth-header {
+        text-align: center;
+        margin-bottom: 24px;
+      }
+      .auth-header h2 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #111;
+      }
+      .auth-header p {
+        color: #666;
+        font-size: 0.9rem;
+      }
+      
+      .auth-tabs {
+        display: flex;
+        margin-bottom: 24px;
+        background: #f8f9fa;
+        border-radius: 8px;
+        padding: 4px;
+      }
+      .auth-tab {
+        flex: 1;
+        padding: 8px 16px;
+        border: none;
+        background: none;
+        cursor: pointer;
+        border-radius: 6px;
+        font-weight: 500;
+        color: #666;
+        transition: all 0.2s;
+      }
+      .auth-tab.active {
+        background: white;
+        color: #217f8d;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      }
+      
+      .form-section {
+        display: none;
+      }
+      .form-section.active {
+        display: block;
+      }
+      
+      .row { 
+        margin-bottom: 16px; 
+      }
+      .row label {
+        display: block;
+        margin-bottom: 6px;
+        font-weight: 500;
+        color: #374151;
+        font-size: 0.9rem;
+      }
+      input[type=email], input[type=password], input[type=text] { 
+        width: 100%; 
+        padding: 12px 14px; 
+        border: 1px solid #d1d5db; 
+        border-radius: 8px; 
+        font-size: 1rem;
+        transition: border-color 0.2s;
+        box-sizing: border-box;
+      }
+      input:focus {
+        outline: none;
+        border-color: #217f8d;
+        box-shadow: 0 0 0 3px rgba(33, 127, 141, 0.1);
+      }
+      
+      .primary { 
+        background: #217f8d; 
+        color: #fff; 
+        border: none; 
+        padding: 12px 24px; 
+        border-radius: 8px; 
+        cursor: pointer; 
+        width: 100%;
+        font-size: 1rem;
+        font-weight: 500;
+        transition: all 0.2s;
+      }
+      .primary:hover {
+        background: #1a6b75;
+        transform: translateY(-1px);
+      }
+      .primary:disabled {
+        background: #9ca3af;
+        cursor: not-allowed;
+        transform: none;
+      }
+      
+      .error { 
+        color: #dc2626; 
+        margin-top: 12px;
+        padding: 8px 12px;
+        background: #fef2f2;
+        border: 1px solid #fecaca;
+        border-radius: 6px;
+        font-size: 0.9rem;
+      }
+      .success {
+        color: #059669;
+        margin-top: 12px;
+        padding: 8px 12px;
+        background: #f0fdf4;
+        border: 1px solid #bbf7d0;
+        border-radius: 6px;
+        font-size: 0.9rem;
+      }
+      .muted { 
+        margin-top: 16px; 
+        color: #666; 
+        font-size: 0.85rem;
+        text-align: center;
+      }
+      
+      .divider {
+        text-align: center;
+        margin: 20px 0;
+        color: #9ca3af;
+        font-size: 0.9rem;
+      }
+      .divider:before, .divider:after {
+        content: "";
+        display: inline-block;
+        width: 40px;
+        height: 1px;
+        background: #e5e7eb;
+        margin: 0 12px;
+        vertical-align: middle;
+      }
+      
+      .password-requirements {
+        font-size: 0.8rem;
+        color: #6b7280;
+        margin-top: 8px;
+      }
+      .password-requirements ul {
+        margin: 8px 0;
+        padding-left: 16px;
+      }
+      .password-requirements li {
+        margin: 4px 0;
+      }
     </style>
   </head>
   <body>
-    <div class="card">
-      <form id="emailForm">
-        <div class="row">
-          <input id="email" type="email" placeholder="Email" required />
-        </div>
-        <div class="row">
-          <input id="password" type="password" placeholder="Password" required />
-        </div>
-        <button class="primary" type="submit">Continue</button>
-      </form>
+    <div class="container">
+      <!-- Hero Section -->
+      <div class="hero">
+        <h1>ASO Checklist Pro</h1>
+        <p>The complete Google Play Store App Store Optimization checklist to maximize your app's visibility and downloads.</p>
+        
+        <ul>
+          <li>36+ comprehensive ASO action items</li>
+          <li>Track progress with detailed notes</li>
+          <li>Export completion reports</li>
+          <li>Dashboard analytics & streak tracking</li>
+          <li>Priority-based filtering system</li>
+          <li>Firebase-powered cloud sync</li>
+        </ul>
+        
+        <p><strong>Join professionals optimizing their apps for better Play Store rankings!</strong></p>
+      </div>
 
-      <div id="error" class="error" style="display:none"></div>
-      <p class="muted">You’ll be redirected to the checklist after sign-in.</p>
+      <!-- Auth Card -->
+      <div class="auth-card">
+        <div class="auth-header">
+          <h2>Get Started</h2>
+          <p>Sign in to your account or create a new one</p>
+        </div>
+
+        <!-- Auth Tabs -->
+        <div class="auth-tabs">
+          <button class="auth-tab active" onclick="switchTab('signin')">Sign In</button>
+          <button class="auth-tab" onclick="switchTab('signup')">Sign Up</button>
+        </div>
+
+        <!-- Sign In Form -->
+        <div id="signinForm" class="form-section active">
+          <form id="emailForm">
+            <div class="row">
+              <label for="signin-email">Email Address</label>
+              <input id="signin-email" type="email" placeholder="Enter your email" required />
+            </div>
+            <div class="row">
+              <label for="signin-password">Password</label>
+              <input id="signin-password" type="password" placeholder="Enter your password" required />
+            </div>
+            <button class="primary" type="submit">Sign In</button>
+          </form>
+        </div>
+
+        <!-- Sign Up Form -->
+        <div id="signupForm" class="form-section">
+          <form id="createAccountForm">
+            <div class="row">
+              <label for="signup-name">Full Name</label>
+              <input id="signup-name" type="text" placeholder="Enter your full name" required />
+            </div>
+            <div class="row">
+              <label for="signup-email">Email Address</label>
+              <input id="signup-email" type="email" placeholder="Enter your email" required />
+            </div>
+            <div class="row">
+              <label for="signup-password">Password</label>
+              <input id="signup-password" type="password" placeholder="Create a password" required />
+              <div class="password-requirements">
+                <ul>
+                  <li>At least 6 characters long</li>
+                  <li>Mix of letters and numbers recommended</li>
+                </ul>
+              </div>
+            </div>
+            <button class="primary" type="submit">Create Account</button>
+          </form>
+        </div>
+
+        <div id="message" class="error" style="display:none"></div>
+        <div id="success" class="success" style="display:none"></div>
+        
+        <p class="muted">
+          By signing up, you agree to our terms of service and privacy policy. 
+          You'll be redirected to your ASO checklist after authentication.
+        </p>
+      </div>
     </div>
 
     <script type="module">
-      // Use Firebase v12 modules (auth + app). Keep analytics if you want measurement.
+      // Firebase v12 modules
       import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
       import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-analytics.js";
-  import { getAuth, onAuthStateChanged, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
+      import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
+      import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
-      // Firebase configuration (copy from Project Settings)
+      // Firebase configuration
       const firebaseConfig = {
         apiKey: "AIzaSyBalB604BqNpNA9DtFxixDXztL-x1uMZgA",
         authDomain: "aso-checklist.firebaseapp.com",
@@ -52,35 +327,167 @@
       const app = initializeApp(firebaseConfig);
       const analytics = getAnalytics(app);
       const auth = getAuth(app);
+      const db = getFirestore(app);
 
       // If already signed in, go to app
       onAuthStateChanged(auth, (user) => {
         if (user) window.location.href = "index.html";
       });
 
-  const emailForm = document.getElementById("emailForm");
-  const errorBox = document.getElementById("error");
+      // UI Elements
+      const signinForm = document.getElementById("emailForm");
+      const signupForm = document.getElementById("createAccountForm");
+      const messageBox = document.getElementById("message");
+      const successBox = document.getElementById("success");
 
-      function showError(err) {
-        // Prefer friendly messages if available (err.code), fallback to message
-        errorBox.textContent = (err && err.code) ? err.code.replace('auth/', '').replaceAll('-', ' ') : (err && err.message) || String(err);
-        errorBox.style.display = "block";
+      // Switch between signin and signup tabs
+      window.switchTab = function(tab) {
+        const signinDiv = document.getElementById("signinForm");
+        const signupDiv = document.getElementById("signupForm");
+        const tabs = document.querySelectorAll(".auth-tab");
+        
+        // Clear messages
+        hideMessages();
+        
+        if (tab === 'signin') {
+          signinDiv.classList.add('active');
+          signupDiv.classList.remove('active');
+          tabs[0].classList.add('active');
+          tabs[1].classList.remove('active');
+        } else {
+          signinDiv.classList.remove('active');
+          signupDiv.classList.add('active');
+          tabs[0].classList.remove('active');
+          tabs[1].classList.add('active');
+        }
+      };
+
+      // Message helpers
+      function showError(message) {
+        hideMessages();
+        messageBox.textContent = message;
+        messageBox.style.display = "block";
       }
 
-      emailForm.addEventListener("submit", async (e) => {
+      function showSuccess(message) {
+        hideMessages();
+        successBox.textContent = message;
+        successBox.style.display = "block";
+      }
+
+      function hideMessages() {
+        messageBox.style.display = "none";
+        successBox.style.display = "none";
+      }
+
+      function formatFirebaseError(error) {
+        const errorCode = error.code;
+        switch (errorCode) {
+          case 'auth/user-not-found':
+            return 'No account found with this email address.';
+          case 'auth/wrong-password':
+            return 'Incorrect password. Please try again.';
+          case 'auth/email-already-in-use':
+            return 'An account with this email already exists.';
+          case 'auth/weak-password':
+            return 'Password should be at least 6 characters long.';
+          case 'auth/invalid-email':
+            return 'Please enter a valid email address.';
+          case 'auth/too-many-requests':
+            return 'Too many failed attempts. Please try again later.';
+          default:
+            return error.message || 'An error occurred. Please try again.';
+        }
+      }
+
+      // Sign In Form Handler
+      signinForm.addEventListener("submit", async (e) => {
         e.preventDefault();
-        errorBox.style.display = "none";
-        const email = document.getElementById("email").value.trim();
-        const pw = document.getElementById("password").value;
+        hideMessages();
+        
+        const email = document.getElementById("signin-email").value.trim();
+        const password = document.getElementById("signin-password").value;
+        
+        if (!email || !password) {
+          showError('Please fill in all fields.');
+          return;
+        }
+
+        const submitBtn = e.target.querySelector('button');
+        const originalText = submitBtn.textContent;
+        submitBtn.textContent = 'Signing in...';
+        submitBtn.disabled = true;
+
         try {
-          await signInWithEmailAndPassword(auth, email, pw);
-          window.location.href = "index.html";
-        } catch (err) {
-          showError(err);
+          await signInWithEmailAndPassword(auth, email, password);
+          showSuccess('Sign in successful! Redirecting...');
+          setTimeout(() => {
+            window.location.href = "index.html";
+          }, 1000);
+        } catch (error) {
+          showError(formatFirebaseError(error));
+          submitBtn.textContent = originalText;
+          submitBtn.disabled = false;
         }
       });
 
-      // Google sign-in button removed — only email/password sign-in is enabled on this page.
+      // Sign Up Form Handler
+      signupForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        hideMessages();
+        
+        const name = document.getElementById("signup-name").value.trim();
+        const email = document.getElementById("signup-email").value.trim();
+        const password = document.getElementById("signup-password").value;
+        
+        if (!name || !email || !password) {
+          showError('Please fill in all fields.');
+          return;
+        }
+
+        if (password.length < 6) {
+          showError('Password must be at least 6 characters long.');
+          return;
+        }
+
+        const submitBtn = e.target.querySelector('button');
+        const originalText = submitBtn.textContent;
+        submitBtn.textContent = 'Creating account...';
+        submitBtn.disabled = true;
+
+        try {
+          // Create user account
+          const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+          const user = userCredential.user;
+          
+          // Update user profile with name
+          await updateProfile(user, {
+            displayName: name
+          });
+          
+          // Create user profile document in Firestore
+          await setDoc(doc(db, 'users', user.uid), {
+            uid: user.uid,
+            email: email,
+            displayName: name,
+            createdAt: serverTimestamp(),
+            lastLogin: serverTimestamp(),
+            asoSubmissions: 0,
+            joinedDate: new Date().toISOString().split('T')[0]
+          });
+
+          showSuccess('Account created successfully! Redirecting to your ASO checklist...');
+          
+          setTimeout(() => {
+            window.location.href = "index.html";
+          }, 2000);
+          
+        } catch (error) {
+          showError(formatFirebaseError(error));
+          submitBtn.textContent = originalText;
+          submitBtn.disabled = false;
+        }
+      });
     </script>
   </body>
 </html>

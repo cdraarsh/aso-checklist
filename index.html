@@ -101,7 +101,7 @@
   --font-weight-normal: 400;
   --font-weight-medium: 500;
   --font-weight-semibold: 550;
-  --font-weight-bold: 600;
+  --font-weight-bold: 700;
   --line-height-tight: 1.2;
   --line-height-normal: 1.5;
   --letter-spacing-tight: -0.01em;
@@ -138,8 +138,8 @@
     inset 0 -1px 0 rgba(0, 0, 0, 0.03);
 
   /* Animation */
-  --duration-fast: 150ms;
-  --duration-normal: 250ms;
+  --duration-fast: 600ms;
+  --duration-normal: 1000ms;
   --ease-standard: cubic-bezier(0.16, 1, 0.3, 1);
 
   /* Layout */
@@ -324,6 +324,23 @@ body {
   border-color: var(--color-primary);
 }
 
+.priority-filter {
+  min-width: 180px;
+  padding: var(--space-12) var(--space-16);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-base);
+  font-size: var(--font-size-base);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-family: var(--font-family-base);
+  cursor: pointer;
+}
+
+.priority-filter:focus {
+  outline: var(--focus-outline);
+  border-color: var(--color-primary);
+}
+
 .btn {
   padding: var(--space-12) var(--space-20);
   border: none;
@@ -412,7 +429,7 @@ body {
 
 .section-title {
   font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-semibold);
+  font-weight: var(--font-weight-bold);
   margin-bottom: var(--space-6);
   color: var(--color-text);
 }
@@ -472,7 +489,6 @@ body {
   display: flex;
   align-items: flex-start;
   gap: var(--space-12);
-  cursor: pointer;
   user-select: none;
 }
 
@@ -542,13 +558,12 @@ body {
 
 /* Item Details */
 .item-details {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height var(--duration-normal) var(--ease-standard);
+  max-height: none;
+  overflow: visible;
 }
 
 .checklist-item.expanded .item-details {
-  max-height: 1000px;
+  max-height: none;
 }
 
 .item-details-content {
@@ -558,10 +573,10 @@ body {
   padding-top: var(--space-16);
 }
 
-/* Subtle opacity & slide for inner content to make expands smoother */
+/* Item content always visible */
 .section-items, .item-details-content {
-  transition: opacity 220ms ease, transform 220ms ease;
-  will-change: opacity, transform;
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .detail-section {
@@ -618,6 +633,96 @@ body {
   font-size: var(--font-size-lg);
 }
 
+/* Submit Section */
+.submit-section {
+  margin-top: var(--space-32);
+  padding-top: var(--space-32);
+  border-top: 1px solid var(--color-card-border);
+}
+
+.submit-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-card-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-32);
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+}
+
+.submit-title {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--space-12);
+  color: var(--color-text);
+}
+
+.submit-description {
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-24);
+  line-height: var(--line-height-normal);
+}
+
+.submit-progress {
+  margin-bottom: var(--space-24);
+  padding: var(--space-16);
+  background: var(--color-secondary);
+  border-radius: var(--radius-base);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+}
+
+.btn-submit {
+  padding: var(--space-16) var(--space-32);
+  border: none;
+  border-radius: var(--radius-base);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-standard);
+  font-family: var(--font-family-base);
+  min-width: 200px;
+  position: relative;
+}
+
+.btn-submit:enabled {
+  background: var(--color-success);
+  color: var(--color-btn-primary-text);
+}
+
+.btn-submit:enabled:hover {
+  background: var(--color-primary-hover);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-submit:disabled {
+  background: var(--color-secondary);
+  color: var(--color-text-secondary);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.submit-status {
+  margin-top: var(--space-16);
+  padding: var(--space-12);
+  border-radius: var(--radius-base);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+}
+
+.submit-status.success {
+  background: rgba(var(--color-success-rgb), var(--status-bg-opacity));
+  color: var(--color-success);
+  border: 1px solid rgba(var(--color-success-rgb), var(--status-border-opacity));
+}
+
+.submit-status.error {
+  background: rgba(var(--color-error-rgb), var(--status-bg-opacity));
+  color: var(--color-error);
+  border: 1px solid rgba(var(--color-error-rgb), var(--status-border-opacity));
+}
+
 /* Print Styles */
 @media print {
   body {
@@ -650,7 +755,10 @@ body {
         <header class="header">
             <h1 class="header-title">Google Play Store ASO Checklist</h1>
             <p class="header-subtitle">Comprehensive guide to optimize your app's visibility and conversion on the Play Store</p>
-      <button id="logoutBtn" class="btn btn-secondary" style="display:none; float:right;">Logout</button>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 16px;">
+                <a href="dashboard.html" class="btn btn-primary" id="dashboardBtn" style="display:none;">📊 View Dashboard</a>
+                <button id="logoutBtn" class="btn btn-secondary" style="display:none;">Logout</button>
+            </div>
         </header>
 
         <!-- Progress Dashboard -->
@@ -669,12 +777,21 @@ body {
                 <div class="progress-stat">
                     <strong id="sectionsCompleted">0</strong> sections fully completed
                 </div>
+                <div class="progress-stat" id="filteredProgress" style="display: none;">
+                    <strong id="filteredCompletedCount">0</strong> of <strong id="filteredTotalCount">0</strong> filtered items completed
+                </div>
             </div>
         </div>
 
     <!-- Controls -->
     <div class="controls">
       <input type="text" class="search-box" id="searchBox" placeholder="Search checklist items...">
+      <select class="priority-filter" id="priorityFilter">
+        <option value="all">All Priorities</option>
+        <option value="high">High Priority Only</option>
+        <option value="medium">Medium Priority Only</option>
+        <option value="low">Low Priority Only</option>
+      </select>
       <button class="btn btn-secondary" id="expandAllBtn">Expand All</button>
       <button class="btn btn-secondary" id="collapseAllBtn">Collapse All</button>
     </div>
@@ -686,6 +803,22 @@ body {
         <div class="empty-state" id="emptyState" style="display: none;">
             <div class="empty-state-icon">🔍</div>
             <p class="empty-state-text">No items match your search</p>
+        </div>
+
+        <!-- Submit Section -->
+        <div class="submit-section" id="submitSection">
+            <div class="submit-card">
+                <h3 class="submit-title">Complete ASO Review</h3>
+                <p class="submit-description">Submit your completed ASO checklist for today. All items must be completed before submission.</p>
+                <div class="submit-progress" id="submitProgress">
+                    <span id="submitProgressText">Complete all checklist items to enable submission</span>
+                </div>
+                <button class="btn-submit" id="submitBtn" disabled>
+                    <span id="submitBtnText">Submit ASO Review</span>
+                    <span id="submitBtnLoader" style="display: none;">Submitting...</span>
+                </button>
+                <div class="submit-status" id="submitStatus" style="display: none;"></div>
+            </div>
         </div>
     </div>
 
@@ -1085,8 +1218,9 @@ body {
         let appState = {
             sections: JSON.parse(JSON.stringify(checklistData)),
             searchQuery: '',
-            expandedSections: new Set(),
-            expandedItems: new Set()
+            priorityFilter: 'all',
+            expandedSections: new Set(), // Start with all sections collapsed
+            expandedItems: new Set() // Start with all items collapsed
         };
 
     // Load saved notes/saved-flags from localStorage into appState
@@ -1109,8 +1243,8 @@ body {
 
         // Initialize app
         function init() {
-      // Hydrate expanded state (sections & items) from storage so users keep what they opened
-      hydrateExpandedState();
+      // Start with all sections collapsed by default
+      // hydrateExpandedState(); // Commented out to start collapsed
       renderSections();
             updateProgress();
             setupEventListeners();
@@ -1146,8 +1280,35 @@ body {
         // Setup event listeners
         function setupEventListeners() {
             document.getElementById('searchBox').addEventListener('input', handleSearch);
+            document.getElementById('priorityFilter').addEventListener('change', handlePriorityFilter);
             document.getElementById('expandAllBtn').addEventListener('click', expandAll);
             document.getElementById('collapseAllBtn').addEventListener('click', collapseAll);
+            document.getElementById('submitBtn').addEventListener('click', handleSubmit);
+            
+            // Event delegation for note buttons to prevent glitches
+            document.addEventListener('click', function(e) {
+                // Handle Save Findings button
+                if (e.target && e.target.classList.contains('note-save-btn')) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const itemId = e.target.getAttribute('data-item-id');
+                    const sectionId = e.target.getAttribute('data-section-id');
+                    if (itemId && sectionId) {
+                        saveItemNote(itemId, parseInt(sectionId));
+                    }
+                }
+                
+                // Handle Clear button
+                if (e.target && e.target.classList.contains('note-clear-btn')) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const itemId = e.target.getAttribute('data-item-id');
+                    const sectionId = e.target.getAttribute('data-section-id');
+                    if (itemId && sectionId) {
+                        clearItemNote(itemId, parseInt(sectionId));
+                    }
+                }
+            });
         }
 
         // Render sections
@@ -1200,12 +1361,11 @@ body {
 
         // Render individual item
         function renderItem(item, sectionId) {
-            const isExpanded = appState.expandedItems.has(item.id);
             const priorityClass = `priority-${item.importance.toLowerCase()}`;
       const noteValue = item.note ? escapeHtml(item.note) : '';
 
       return `
-                <div class="checklist-item ${item.completed ? 'completed' : ''} ${isExpanded ? 'expanded' : ''}" data-item-id="${item.id}">
+                <div class="checklist-item ${item.completed ? 'completed' : ''} expanded" data-item-id="${item.id}">
                     <div class="item-header">
                         <div class="item-checkbox-container">
                             <input 
@@ -1216,7 +1376,7 @@ body {
                                 onclick="event.stopPropagation()"
                             >
                         </div>
-                        <div class="item-content" onclick="toggleItem('${item.id}')">
+                        <div class="item-content">
                             <div class="item-title-row">
                                 <span class="item-title">${item.title}</span>
                                 <span class="priority-badge ${priorityClass}">${item.importance}</span>
@@ -1239,8 +1399,8 @@ body {
                 <div class="detail-content">
                   <textarea id="note-${item.id}" rows="3" style="width:100%; padding:8px; border-radius:6px; border:1px solid var(--color-card-border-inner); background:var(--color-surface); color:var(--color-text);">${noteValue}</textarea>
                   <div style="margin-top:8px; display:flex; gap:8px; align-items:center;">
-                    <button class="btn btn-primary" onclick="event.stopPropagation(); saveItemNote('${item.id}', ${sectionId});">Save Findings</button>
-                    <button class="btn btn-secondary" onclick="event.stopPropagation(); clearItemNote('${item.id}', ${sectionId});">Clear</button>
+                    <button class="btn btn-primary note-save-btn" data-item-id="${item.id}" data-section-id="${sectionId}">Save Findings</button>
+                    <button class="btn btn-secondary note-clear-btn" data-item-id="${item.id}" data-section-id="${sectionId}">Clear</button>
                     <span id="note-status-${item.id}" style="font-size:12px; color:var(--color-text-secondary); margin-left:8px;">${item.noteSaved ? 'Saved' : 'Not saved'}</span>
                   </div>
                 </div>
@@ -1261,6 +1421,101 @@ body {
         .replace(/'/g, '&#39;');
     }
 
+    // Track elements currently animating to prevent conflicts
+    const animatingElements = new Set();
+
+    // Apply animations to a specific element (section or item)
+    function applyExpandHeightsToElement(element) {
+      if (!element) return;
+      
+      // Prevent multiple animations on the same element
+      if (animatingElements.has(element)) {
+        return;
+      }
+      
+      animatingElements.add(element);
+      if (element.classList.contains('section-card')) {
+        // Handle section animation
+        const content = element.querySelector('.section-content');
+        if (!content) return;
+        
+        content.style.overflow = 'hidden';
+        content.style.transition = 'max-height 1000ms ease';
+        const innerItems = element.querySelector('.section-items');
+        
+        if (element.classList.contains('expanded')) {
+          if (innerItems) {
+            innerItems.style.opacity = '0';
+            innerItems.style.transform = 'translateY(-8px)';
+          }
+          content.style.maxHeight = '0px';
+          requestAnimationFrame(() => {
+            content.style.maxHeight = content.scrollHeight + 'px';
+            if (innerItems) {
+              innerItems.style.transition = 'opacity 800ms ease, transform 800ms ease';
+              innerItems.style.opacity = '1';
+              innerItems.style.transform = 'translateY(0)';
+            }
+          });
+        } else {
+          if (innerItems) {
+            innerItems.style.transition = 'opacity 600ms ease, transform 600ms ease';
+            innerItems.style.opacity = '0';
+            innerItems.style.transform = 'translateY(-8px)';
+          }
+          requestAnimationFrame(() => { content.style.maxHeight = '0px'; });
+        }
+        
+        // Clean up after animation
+        setTimeout(() => {
+          if (element.classList.contains('expanded')) {
+            content.style.maxHeight = 'none';
+          }
+          animatingElements.delete(element);
+        }, 1200);
+        
+      } else if (element.classList.contains('checklist-item')) {
+        // Handle item animation
+        const details = element.querySelector('.item-details');
+        if (!details) return;
+        
+        details.style.overflow = 'hidden';
+        details.style.transition = 'max-height 900ms ease';
+        const inner = element.querySelector('.item-details-content');
+        
+        if (element.classList.contains('expanded')) {
+          if (inner) {
+            inner.style.opacity = '0';
+            inner.style.transform = 'translateY(-8px)';
+          }
+          details.style.maxHeight = '0px';
+          requestAnimationFrame(() => {
+            details.style.maxHeight = details.scrollHeight + 'px';
+            if (inner) {
+              inner.style.transition = 'opacity 700ms ease, transform 700ms ease';
+              inner.style.opacity = '1';
+              inner.style.transform = 'translateY(0)';
+            }
+          });
+        } else {
+          if (inner) {
+            inner.style.transition = 'opacity 500ms ease, transform 500ms ease';
+            inner.style.opacity = '0';
+            inner.style.transform = 'translateY(-8px)';
+          }
+          requestAnimationFrame(() => { details.style.maxHeight = '0px'; });
+        }
+        
+        // Clean up after animation
+        setTimeout(() => {
+          if (element.classList.contains('expanded')) {
+            details.style.maxHeight = 'none';
+          }
+          animatingElements.delete(element);
+        }, 1200);
+      }
+    }
+
     // Smooth expand/collapse: measure scrollHeight and set max-height so animations don't jump
     function applyExpandHeights() {
       // Sections
@@ -1268,13 +1523,13 @@ body {
         const content = card.querySelector('.section-content');
         if (!content) return;
         content.style.overflow = 'hidden';
-        content.style.transition = 'max-height 260ms ease';
+        content.style.transition = 'max-height 1000ms ease';
         const innerItems = card.querySelector('.section-items');
         if (card.classList.contains('expanded')) {
           // prepare inner for fade/slide
           if (innerItems) {
             innerItems.style.opacity = '0';
-            innerItems.style.transform = 'translateY(-6px)';
+            innerItems.style.transform = 'translateY(-8px)';
           }
           // set to 0 first so transition runs
           content.style.maxHeight = '0px';
@@ -1282,7 +1537,7 @@ body {
           requestAnimationFrame(() => {
             content.style.maxHeight = content.scrollHeight + 'px';
             if (innerItems) {
-              innerItems.style.transition = 'opacity 220ms ease, transform 220ms ease';
+              innerItems.style.transition = 'opacity 800ms ease, transform 800ms ease';
               innerItems.style.opacity = '1';
               innerItems.style.transform = 'translateY(0)';
             }
@@ -1290,9 +1545,9 @@ body {
         } else {
           // collapse: fade out inner then collapse height
           if (innerItems) {
-            innerItems.style.transition = 'opacity 180ms ease, transform 180ms ease';
+            innerItems.style.transition = 'opacity 600ms ease, transform 600ms ease';
             innerItems.style.opacity = '0';
-            innerItems.style.transform = 'translateY(-6px)';
+            innerItems.style.transform = 'translateY(-8px)';
           }
           requestAnimationFrame(() => { content.style.maxHeight = '0px'; });
         }
@@ -1303,27 +1558,27 @@ body {
         const details = item.querySelector('.item-details');
         if (!details) return;
         details.style.overflow = 'hidden';
-        details.style.transition = 'max-height 220ms ease';
+        details.style.transition = 'max-height 900ms ease';
         const inner = item.querySelector('.item-details-content');
         if (item.classList.contains('expanded')) {
           if (inner) {
             inner.style.opacity = '0';
-            inner.style.transform = 'translateY(-6px)';
+            inner.style.transform = 'translateY(-8px)';
           }
           details.style.maxHeight = '0px';
           requestAnimationFrame(() => {
             details.style.maxHeight = details.scrollHeight + 'px';
             if (inner) {
-              inner.style.transition = 'opacity 200ms ease, transform 200ms ease';
+              inner.style.transition = 'opacity 700ms ease, transform 700ms ease';
               inner.style.opacity = '1';
               inner.style.transform = 'translateY(0)';
             }
           });
         } else {
           if (inner) {
-            inner.style.transition = 'opacity 160ms ease, transform 160ms ease';
+            inner.style.transition = 'opacity 500ms ease, transform 500ms ease';
             inner.style.opacity = '0';
-            inner.style.transform = 'translateY(-6px)';
+            inner.style.transform = 'translateY(-8px)';
           }
           requestAnimationFrame(() => { details.style.maxHeight = '0px'; });
         }
@@ -1334,7 +1589,7 @@ body {
         document.querySelectorAll('.section-card.expanded .section-content, .checklist-item.expanded .item-details').forEach(el => {
           try { el.style.maxHeight = 'none'; } catch (e) {}
         });
-      }, 350);
+      }, 1200);
     }
 
     // Debounce helper
@@ -1396,24 +1651,36 @@ body {
 
         // Toggle section expansion
         function toggleSection(sectionId) {
+            const sectionCard = document.querySelector(`[data-section-id="${sectionId}"]`);
+            if (!sectionCard) return;
+            
+            // Prevent toggle if element is currently animating
+            if (animatingElements.has(sectionCard)) {
+                return;
+            }
+            
             if (appState.expandedSections.has(sectionId)) {
                 appState.expandedSections.delete(sectionId);
             } else {
                 appState.expandedSections.add(sectionId);
             }
-      saveExpandedState();
-      renderSections();
+            saveExpandedState();
+            
+            // Update DOM directly instead of full re-render
+            const isExpanded = appState.expandedSections.has(sectionId);
+            if (isExpanded) {
+                sectionCard.classList.add('expanded');
+            } else {
+                sectionCard.classList.remove('expanded');
+            }
+            // Apply animations only to this section
+            applyExpandHeightsToElement(sectionCard);
         }
 
-        // Toggle item expansion
+        // Items are always expanded - no toggle functionality
         function toggleItem(itemId) {
-            if (appState.expandedItems.has(itemId)) {
-                appState.expandedItems.delete(itemId);
-            } else {
-                appState.expandedItems.add(itemId);
-            }
-      saveExpandedState();
-      renderSections();
+            // Do nothing - items stay expanded
+            return;
         }
 
         // Toggle item completion
@@ -1427,15 +1694,23 @@ body {
             if (!item.completed && !item.noteSaved) {
             // block check
             alert('Please save Findings for this item before checking it.');
-            // expand the item so Findings UI is visible
-            appState.expandedItems.add(item.id);
-            saveExpandedState();
-            renderSections();
+            // Items are already expanded, just return
             return;
           }
 
           // Toggle completion
           item.completed = !item.completed;
+          
+          // Update DOM directly without full re-render
+          const itemElement = document.querySelector(`[data-item-id="${itemId}"]`);
+          if (itemElement) {
+            if (item.completed) {
+              itemElement.classList.add('completed');
+            } else {
+              itemElement.classList.remove('completed');
+            }
+          }
+          
           // Persist completion to Firestore if available
           try {
             if (window && typeof window.setProgressDoc === 'function' && window.auth && window.auth.currentUser) {
@@ -1445,7 +1720,6 @@ body {
             console.warn('Failed to persist completion', e);
           }
           updateProgress();
-          renderSections();
                 }
             }
         }
@@ -1477,8 +1751,6 @@ body {
       }
       const status = document.getElementById(`note-status-${itemId}`);
       if (status) status.textContent = item.noteSaved ? 'Saved' : 'Not saved';
-      // give visual feedback by briefly changing the button text (optional)
-      renderSections();
     }
 
     function clearItemNote(itemId, sectionId) {
@@ -1502,7 +1774,11 @@ body {
       } catch (e) {
         console.warn('Failed to clear note in Firestore', e);
       }
-      renderSections();
+      // Update status without full re-render
+      const status = document.getElementById(`note-status-${itemId}`);
+      if (status) status.textContent = 'Not saved';
+      const textarea = document.getElementById(`note-${itemId}`);
+      if (textarea) textarea.value = '';
     }
 
         // Update progress
@@ -1511,6 +1787,7 @@ body {
             let completedItems = 0;
             let sectionsFullyCompleted = 0;
             
+            // Calculate overall progress
             appState.sections.forEach(section => {
                 totalItems += section.items.length;
                 const sectionCompleted = section.items.filter(item => item.completed).length;
@@ -1523,40 +1800,107 @@ body {
             
             const percentage = totalItems > 0 ? Math.round((completedItems / totalItems) * 100) : 0;
             
+            // Update overall progress display
             document.getElementById('progressPercentage').textContent = `${percentage}%`;
             document.getElementById('progressBarFill').style.width = `${percentage}%`;
             document.getElementById('completedCount').textContent = completedItems;
             document.getElementById('totalCount').textContent = totalItems;
             document.getElementById('sectionsCompleted').textContent = sectionsFullyCompleted;
-        }
-
-        // Filter sections based on search
-        function filterSections() {
-            if (!appState.searchQuery) {
-                return appState.sections;
-            }
             
-            const query = appState.searchQuery.toLowerCase();
-            
-            return appState.sections.map(section => {
-                const matchingItems = section.items.filter(item => {
-                    return item.title.toLowerCase().includes(query) ||
-                           item.description.toLowerCase().includes(query) ||
-                           item.tips.toLowerCase().includes(query) ||
-                           item.benchmark.toLowerCase().includes(query) ||
-                           item.importance.toLowerCase().includes(query);
+            // Calculate and display filtered progress if filter is active
+            const filteredProgressDiv = document.getElementById('filteredProgress');
+            if (appState.priorityFilter !== 'all') {
+                let filteredTotal = 0;
+                let filteredCompleted = 0;
+                
+                appState.sections.forEach(section => {
+                    section.items.forEach(item => {
+                        if (item.importance.toLowerCase() === appState.priorityFilter) {
+                            filteredTotal++;
+                            if (item.completed) {
+                                filteredCompleted++;
+                            }
+                        }
+                    });
                 });
                 
-                if (matchingItems.length > 0) {
+                document.getElementById('filteredCompletedCount').textContent = filteredCompleted;
+                document.getElementById('filteredTotalCount').textContent = filteredTotal;
+                filteredProgressDiv.style.display = 'block';
+            } else {
+                filteredProgressDiv.style.display = 'none';
+            }
+            
+            // Update submit button state
+            updateSubmitButton(completedItems, totalItems);
+        }
+
+        // Update submit button based on completion status
+        function updateSubmitButton(completedItems, totalItems) {
+            const submitBtn = document.getElementById('submitBtn');
+            const submitProgressText = document.getElementById('submitProgressText');
+            const isComplete = totalItems > 0 && completedItems === totalItems;
+            
+            if (isComplete) {
+                submitBtn.disabled = false;
+                submitProgressText.textContent = `🎉 All ${totalItems} items completed! Ready to submit.`;
+                submitProgressText.style.color = 'var(--color-success)';
+            } else {
+                submitBtn.disabled = true;
+                const remaining = totalItems - completedItems;
+                submitProgressText.textContent = `Complete ${remaining} more item${remaining === 1 ? '' : 's'} to enable submission (${completedItems}/${totalItems} done)`;
+                submitProgressText.style.color = 'var(--color-text-secondary)';
+            }
+        }
+
+        // Filter sections based on search and priority
+        function filterSections() {
+            const query = appState.searchQuery.toLowerCase();
+            const priorityFilter = appState.priorityFilter;
+            
+            return appState.sections.map(section => {
+                let filteredItems = section.items;
+                
+                // Apply priority filter first
+                if (priorityFilter !== 'all') {
+                    filteredItems = filteredItems.filter(item => {
+                        return item.importance.toLowerCase() === priorityFilter;
+                    });
+                }
+                
+                // Apply search filter if there's a search query
+                if (query) {
+                    filteredItems = filteredItems.filter(item => {
+                        return item.title.toLowerCase().includes(query) ||
+                               item.description.toLowerCase().includes(query) ||
+                               item.tips.toLowerCase().includes(query) ||
+                               item.benchmark.toLowerCase().includes(query) ||
+                               item.importance.toLowerCase().includes(query);
+                    });
+                }
+                
+                // If we have matching items after filtering, return section with filtered items
+                if (filteredItems.length > 0) {
                     return {
                         ...section,
-                        items: matchingItems
+                        items: filteredItems
                     };
                 }
                 
-                if (section.title.toLowerCase().includes(query) || 
-                    section.description.toLowerCase().includes(query)) {
+                // If no items match but section title/description matches search (and no priority filter), include all section items
+                if (query && priorityFilter === 'all' && 
+                    (section.title.toLowerCase().includes(query) || 
+                     section.description.toLowerCase().includes(query))) {
                     return section;
+                }
+                
+                // If only priority filter is active and section has items of that priority
+                if (!query && priorityFilter !== 'all' && 
+                    section.items.some(item => item.importance.toLowerCase() === priorityFilter)) {
+                    return {
+                        ...section,
+                        items: section.items.filter(item => item.importance.toLowerCase() === priorityFilter)
+                    };
                 }
                 
                 return null;
@@ -1567,6 +1911,105 @@ body {
         function handleSearch(event) {
             appState.searchQuery = event.target.value;
             renderSections();
+        }
+
+        // Handle priority filter
+        function handlePriorityFilter(event) {
+            appState.priorityFilter = event.target.value;
+            renderSections();
+        }
+
+        // Handle ASO review submission
+        async function handleSubmit() {
+            const submitBtn = document.getElementById('submitBtn');
+            const submitBtnText = document.getElementById('submitBtnText');
+            const submitBtnLoader = document.getElementById('submitBtnLoader');
+            const submitStatus = document.getElementById('submitStatus');
+            
+            // Check if all items are completed
+            let totalItems = 0;
+            let completedItems = 0;
+            appState.sections.forEach(section => {
+                totalItems += section.items.length;
+                completedItems += section.items.filter(item => item.completed).length;
+            });
+            
+            if (completedItems !== totalItems) {
+                showSubmitStatus('Please complete all checklist items before submitting.', 'error');
+                return;
+            }
+            
+            // Start loading state
+            submitBtn.disabled = true;
+            submitBtnText.style.display = 'none';
+            submitBtnLoader.style.display = 'inline';
+            submitStatus.style.display = 'none';
+            
+            try {
+                // Prepare submission data
+                const submissionData = {
+                    userId: window.auth?.currentUser?.uid || 'anonymous',
+                    userEmail: window.auth?.currentUser?.email || 'anonymous',
+                    submissionDate: new Date().toISOString(),
+                    submissionTimestamp: Date.now(),
+                    totalItems: totalItems,
+                    completedItems: completedItems,
+                    completionPercentage: 100,
+                    sections: appState.sections.map(section => ({
+                        id: section.id,
+                        title: section.title,
+                        totalItems: section.items.length,
+                        completedItems: section.items.filter(item => item.completed).length,
+                        items: section.items.map(item => ({
+                            id: item.id,
+                            title: item.title,
+                            importance: item.importance,
+                            completed: item.completed,
+                            note: item.note || '',
+                            completedAt: item.completed ? new Date().toISOString() : null
+                        }))
+                    })),
+                    deviceInfo: {
+                        userAgent: navigator.userAgent,
+                        timestamp: new Date().toISOString()
+                    }
+                };
+                
+                // Submit to Firebase
+                await submitToFirebase(submissionData);
+                
+                // Success
+                showSubmitStatus('🎉 ASO Review submitted successfully! Redirecting to dashboard...', 'success');
+                
+                // Redirect to dashboard after short delay
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 2000);
+                
+            } catch (error) {
+                console.error('Submission error:', error);
+                showSubmitStatus('Failed to submit ASO review. Please try again.', 'error');
+                
+                // Reset button state
+                submitBtnText.style.display = 'inline';
+                submitBtnLoader.style.display = 'none';
+                submitBtn.disabled = false;
+            }
+        }
+        
+        // Show submit status message
+        function showSubmitStatus(message, type) {
+            const submitStatus = document.getElementById('submitStatus');
+            submitStatus.textContent = message;
+            submitStatus.className = `submit-status ${type}`;
+            submitStatus.style.display = 'block';
+            
+            // Auto-hide after 5 seconds for success messages
+            if (type === 'success') {
+                setTimeout(() => {
+                    submitStatus.style.display = 'none';
+                }, 5000);
+            }
         }
 
         // Expand all sections
@@ -1657,14 +2100,17 @@ body {
 
   onAuthStateChanged(auth, (user) => {
     const logoutBtn = document.getElementById('logoutBtn');
+    const dashboardBtn = document.getElementById('dashboardBtn');
     if (!user) {
-      // Hide app and logout button, redirect to login
+      // Hide app and buttons, redirect to login
       if (logoutBtn) logoutBtn.style.display = 'none';
+      if (dashboardBtn) dashboardBtn.style.display = 'none';
       window.location.href = "login.html";
       return;
     }
-    // Show app, show logout button & launch your existing code
+    // Show app, show buttons & launch your existing code
     if (logoutBtn) logoutBtn.style.display = '';
+    if (dashboardBtn) dashboardBtn.style.display = '';
     document.querySelector(".app-container").style.display = "";
     if (typeof init === "function") init();
     // After init, subscribe to user's saved progress (notes + completed)
@@ -1725,9 +2171,38 @@ body {
     }
   });
 
-  // Expose Firestore helper to the page scripts
+  // Submit completed ASO review to Firebase
+  async function submitToFirebase(submissionData) {
+    if (!submissionData.userId) {
+      throw new Error('User must be authenticated to submit');
+    }
+    
+    // Create a unique submission ID based on user and date
+    const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
+    const submissionId = `${submissionData.userId}_${today}_${submissionData.submissionTimestamp}`;
+    
+    try {
+      // Store in 'aso_submissions' collection only
+      await setDoc(doc(db, 'aso_submissions', submissionId), {
+        ...submissionData,
+        submissionId: submissionId,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp()
+      });
+      
+      console.log('ASO submission saved successfully:', submissionId);
+      return submissionId;
+      
+    } catch (error) {
+      console.error('Error saving ASO submission:', error);
+      throw error;
+    }
+  }
+
+  // Expose functions to the page scripts
   window.setProgressDoc = setProgressDoc;
   window.subscribeToUserProgress = subscribeToUserProgress;
+  window.submitToFirebase = submitToFirebase;
   window.db = db;
   window.auth = auth;
   </script>
